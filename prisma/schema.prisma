@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  wallets   Wallet[]
+}
+
+model Wallet {
+  id          String   @id @default(cuid())
+  name        String
+  publicKey   String   @unique
+  threshold   Int
+  totalShares Int
+  network     String   @default("testnet") // mainnet, testnet, futurenet
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  participants Participant[]
+  transactions Transaction[]
+
+  @@map("wallets")
+}
+
+model Participant {
+  id        String   @id @default(cuid())
+  userId    String
+  walletId  String
+  shareIndex Int     // Index of the key share
+  encryptedShare String // Encrypted key share data
+  publicKey String   // Participant's public key for verification
+  status    String   @default("active") // active, inactive, revoked
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  wallet    Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  signatures Signature[]
+
+  @@unique([walletId, shareIndex])
+  @@map("participants")
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  walletId    String
+  stellarTxId String?  @unique // Stellar transaction ID after submission
+  amount      String
+  toAddress   String
+  memo        String?
+  status      String   @default("pending") // pending, collecting_signatures, signed, submitted, confirmed
+  network     String   @default("testnet")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  wallet      Wallet      @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  signatures  Signature[]
+
+  @@map("transactions")
+}
+
+model Signature {
+  id            String   @id @default(cuid())
+  transactionId String
+  participantId String
+  signatureData String   // The partial signature or share contribution
+  status        String   @default("pending") // pending, submitted, verified
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+
+  @@unique([transactionId, participantId])
+  @@map("signatures")
+}
