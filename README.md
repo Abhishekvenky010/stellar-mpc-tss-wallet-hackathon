@@ -122,19 +122,5 @@ stellar-mpc-tss-next/
 5. Submit a pull request
 
 
-<<<<<<< HEAD
-
-## 🌟 **Hackathon Recognition**
-
-**StellarGuard TSS** was built for blockchain hackathons, demonstrating:
-- Cutting-edge cryptographic techniques
-- Real-world blockchain integration
-- Enterprise-grade security architecture
-- Modern web development practices
-- Innovative use of WebAssembly in blockchain applications
-
----
-=======
->>>>>>> 9dfbd7dd691910c97f16e2cec335311aa43b796d
 
 **Built with ❤️ for the Stellar ecosystem and blockchain security**
