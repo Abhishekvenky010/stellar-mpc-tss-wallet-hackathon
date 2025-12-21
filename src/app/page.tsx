@@ -15,9 +15,18 @@ export default function Home() {
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-black">
-              Stellar MPC/TSS Wallet
-            </h1>
+            <div className="flex items-center space-x-4">
+              <h1 className="text-2xl font-bold text-black">
+                Stellar MPC/TSS Wallet
+              </h1>
+              <a
+                href="/test-wasm"
+                className="text-sm text-blue-600 hover:text-blue-800 underline"
+                target="_blank"
+              >
+                Test WASM
+              </a>
+            </div>
             <nav className="flex space-x-4">
               <button
                onClick={() => setCurrentView('dashboard')}

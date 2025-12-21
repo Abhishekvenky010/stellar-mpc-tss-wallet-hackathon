@@ -41,7 +41,6 @@ export class StellarTSSWallet {
     const aggregateSecretString = StrKey.encodeEd25519SecretSeed(Buffer.from(aggregateSeed));
     const aggregateKeypair = Keypair.fromSecret(aggregateSecretString);
     const aggregatePublicKey = aggregateKeypair.publicKey();
-    const aggregateSecretKey = aggregateSeed;
 
     const config: TSSWalletConfig = {
       threshold,
@@ -53,8 +52,7 @@ export class StellarTSSWallet {
     this.wallet = {
       config,
       participants,
-      transactions: [],
-      aggregateSecretKey
+      transactions: []
     };
 
     // Fund all participant accounts on testnet for demo
@@ -211,11 +209,14 @@ export class StellarTSSWallet {
       memo: transaction.memo
     };
 
+    // Reconstruct aggregate secret key from participant key shares
+    const aggregateSecretKey = await this.reconstructAggregateKey();
+
     const aggregateWallet = {
       aggregatedPublicKey: this.wallet!.config.publicKey,
       participantKeys: this.wallet!.participants.map(p => p.publicKey),
       threshold: this.wallet!.config.threshold,
-      aggregateSecretKey: this.wallet!.aggregateSecretKey
+      aggregateSecretKey
     };
 
     // Convert signature shares to the format expected by TSS service
@@ -241,6 +242,25 @@ export class StellarTSSWallet {
       transaction.status = 'pending';
       throw error;
     }
+  }
+
+  /**
+   * Reconstruct the aggregate secret key from participant key shares
+   * This is called only when needed for transaction submission
+   */
+  private async reconstructAggregateKey(): Promise<Uint8Array> {
+    if (!this.wallet) {
+      throw new Error('No wallet loaded');
+    }
+
+    // For this simplified implementation, reconstruct the aggregate key
+    // deterministically from participant public keys (same as creation)
+    const publicKeys = this.wallet.participants.map(p => p.publicKey);
+    const publicKeysString = publicKeys.join('');
+    const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(publicKeysString));
+    const aggregateSeed = new Uint8Array(hashBuffer).slice(0, 32);
+
+    return aggregateSeed;
   }
 
 

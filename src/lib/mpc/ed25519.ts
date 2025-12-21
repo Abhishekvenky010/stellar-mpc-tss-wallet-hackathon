@@ -16,15 +16,13 @@ export async function createMPCSigner(): Promise<MPCSigner> {
     // Use computed specifier to avoid bundlers from trying to bundle the wasm at build time
     // eslint-disable-next-line @typescript-eslint/no-implied-eval
     const wasmModule: any = await (Function('p', 'return import(p)'))(wasmPath);
-    // Optional init for wasm-pack bundles
-    // @ts-ignore
-    if (typeof wasmModule.default === 'function') {
-      await wasmModule.default();
-    }
+
+    // Initialize the WASM module
+    await wasmModule.default();
 
     const kp = wasmModule.Keypair.generate();
-    const publicKeyBytes = Uint8Array.from(kp.public_key());
-    const secretKeyBytes = Uint8Array.from(kp.secret_key());
+    const publicKeyBytes = kp.public_key();
+    const secretKeyBytes = kp.secret_key();
 
     // Convert to Stellar public key format (base32 encoded)
     const publicKey = bytesToStellarKey(publicKeyBytes);
@@ -33,23 +31,28 @@ export async function createMPCSigner(): Promise<MPCSigner> {
       publicKey,
       secretKey: secretKeyBytes,
       sign: async (message: Uint8Array): Promise<Uint8Array> => {
-        const signature = wasmModule.sign(Uint8Array.from(message), Uint8Array.from(secretKeyBytes));
-        return Uint8Array.from(signature);
+        const signature = wasmModule.sign(message, secretKeyBytes);
+        return signature;
       }
     };
   } catch (error) {
-    // Fallback to Stellar SDK for consistent key derivation
-    console.warn('❌ WASM module not found, falling back to Stellar SDK:', error);
-    const keypair = Keypair.random();
-    const secretSeed = StrKey.decodeEd25519SecretSeed(keypair.secret());
-    const publicKey = keypair.publicKey();
+    // Fallback to compatible Ed25519 implementation
+    console.warn('❌ WASM module not found, falling back to compatible Ed25519:', error);
+
+    // Generate a 32-byte seed (compatible with WASM ed25519-dalek)
+    const seed = new Uint8Array(32);
+    crypto.getRandomValues(seed);
+
+    // Derive keypair using tweetnacl (same as WASM)
+    const keypair = nacl.sign.keyPair.fromSeed(seed);
+    const publicKey = bytesToStellarKey(keypair.publicKey);
 
     return {
       publicKey,
-      secretKey: secretSeed,
+      secretKey: seed,
       sign: async (message: Uint8Array): Promise<Uint8Array> => {
-        const signature = keypair.sign(Buffer.from(message));
-        return new Uint8Array(signature);
+        const signature = nacl.sign.detached(message, keypair.secretKey);
+        return signature;
       }
     };
   }
@@ -66,11 +69,8 @@ export async function createMPCSignerFromSecretKey(secretKeyBytes: Uint8Array): 
     const wasmPath = '/wasm/ed25519_tss_wasm.js';
     // eslint-disable-next-line @typescript-eslint/no-implied-eval
     const wasmModule: any = await (Function('p', 'return import(p)'))(wasmPath);
-    // Optional init for wasm-pack bundles
-    // @ts-ignore
-    if (typeof wasmModule.default === 'function') {
-      await wasmModule.default();
-    }
+    // Initialize the WASM module
+    await wasmModule.default();
 
     // Derive public key from provided secret (expect 32-byte seed, normalize if needed)
     const seed32 = secretKeyBytes.length === 32 ? secretKeyBytes : secretKeyBytes.slice(0, 32);
@@ -81,21 +81,24 @@ export async function createMPCSignerFromSecretKey(secretKeyBytes: Uint8Array): 
       publicKey: derivedPublicKey,
       secretKey: seed32,
       sign: async (message: Uint8Array): Promise<Uint8Array> => {
-        const signature = wasmModule.sign(Uint8Array.from(message), Uint8Array.from(seed32));
-        return Uint8Array.from(signature);
+        const signature = wasmModule.sign(message, seed32);
+        return signature;
       }
     };
   } catch (error) {
-    // Fallback to tweetnacl
-    const fullSecret = secretKeyBytes.length === 64
-      ? secretKeyBytes
-      : nacl.sign.keyPair.fromSeed(secretKeyBytes.length === 32 ? secretKeyBytes : secretKeyBytes.slice(0, 32)).secretKey;
-    const keypair = nacl.sign.keyPair.fromSecretKey(fullSecret);
+    // Fallback to compatible Ed25519 implementation
+    console.warn('❌ WASM module not found in fromSecretKey, falling back to tweetnacl:', error);
+
+    // Ensure we have a 32-byte seed
+    const seed = secretKeyBytes.length === 32 ? secretKeyBytes : secretKeyBytes.slice(0, 32);
+
+    // Derive keypair using tweetnacl (compatible with WASM)
+    const keypair = nacl.sign.keyPair.fromSeed(seed);
     const publicKey = bytesToStellarKey(keypair.publicKey);
 
     return {
       publicKey,
-      secretKey: fullSecret,
+      secretKey: seed,
       sign: async (message: Uint8Array): Promise<Uint8Array> => {
         const signature = nacl.sign.detached(message, keypair.secretKey);
         return signature;

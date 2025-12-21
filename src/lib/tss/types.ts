@@ -133,5 +133,4 @@ export interface TSSWallet {
   config: TSSWalletConfig;
   participants: TSSParticipant[];
   transactions: TSSTransaction[];
-  aggregateSecretKey?: Uint8Array;
 }
