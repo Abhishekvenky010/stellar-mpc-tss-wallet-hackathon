@@ -134,3 +134,42 @@ export interface TSSWallet {
   participants: TSSParticipant[];
   transactions: TSSTransaction[];
 }
+
+/**
+ * FROST DKG Package
+ */
+export interface DkgPackage {
+  participants: number[];
+  threshold: number;
+  pubkey: Uint8Array;
+  keyShares: KeyShare[];
+  walletId?: number;
+}
+
+/**
+ * FROST Key Share
+ */
+export interface KeyShare {
+  participant_id: number;
+  key_share: Uint8Array;
+}
+
+/**
+ * FROST Round 1 Commitment
+ */
+export interface Round1Commitment {
+  participantId: number;
+  nonceId: number;
+  commitment: Uint8Array;
+  nonces: Uint8Array;
+}
+
+/**
+ * FROST Round 2 Signature
+ */
+export interface Round2Signature {
+  participantId: number;
+  signature: Uint8Array;
+  index: number;
+  shareId: number;
+}
