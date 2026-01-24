@@ -77,38 +77,16 @@ export async function frostDkgInit(participants: number[], threshold: number): P
  * @returns Round1Commitment containing the commitment data
  */
 export async function frostSignRound1(walletId: number, participantId: number): Promise<Round1Commitment> {
-  try {
-    const wasm = await initWasm();
+  const wasm = await initWasm();
 
-    const commitmentBytes = wasm.frost_sign_round1(walletId, participantId);
+  const commitmentBytes = wasm.frost_sign_round1(walletId, participantId);
 
-    return {
-      participantId,
-      nonceId: participantId, // Use participantId as nonceId for compatibility
-      commitment: new Uint8Array(commitmentBytes),
-      nonces: new Uint8Array(64) // Not used, but keep for compatibility
-    };
-  } catch (error) {
-    console.error('frostSignRound1: Failed to use real FROST:', error);
-
-    // Fallback to mock implementation
-    const mockCommitment: Round1Commitment = {
-      participantId,
-      nonceId: participantId, // Use participantId as fallback nonceId
-      commitment: new Uint8Array(32),
-      nonces: new Uint8Array(64)
-    };
-
-    // Generate a deterministic commitment based on inputs for demo
-    const combined = new Uint8Array(4 + 2); // walletId + participantId
-    new DataView(combined.buffer).setUint32(0, walletId, true);
-    new DataView(combined.buffer).setUint16(4, participantId, true);
-
-    const hash = await crypto.subtle.digest('SHA-256', combined);
-    mockCommitment.commitment.set(new Uint8Array(hash).slice(0, 32));
-
-    return mockCommitment;
-  }
+  return {
+    participantId,
+    nonceId: participantId, // Use participantId as nonceId for compatibility
+    commitment: new Uint8Array(commitmentBytes),
+    nonces: new Uint8Array(64) // Not used, but keep for compatibility
+  };
 }
 
 /**
@@ -126,111 +104,30 @@ export async function frostSignRound2(
   commitments: Round1Commitment[],
   message: Uint8Array
 ): Promise<Round2Signature> {
-  try {
-    const wasm = await initWasm();
+  const wasm = await initWasm();
 
-    // Concatenate all commitment bytes
-    const concatenatedCommitments = new Uint8Array(commitments.flatMap(c => Array.from(c.commitment)));
+  // Concatenate all commitment bytes
+  const concatenatedCommitments = new Uint8Array(commitments.flatMap(c => Array.from(c.commitment)));
 
-    const signatureShareBytes = wasm.frost_sign_round2(walletId, participantId, concatenatedCommitments, message);
+  const signatureShareBytes = wasm.frost_sign_round2(walletId, participantId, concatenatedCommitments, message);
 
-    return {
-      participantId,
-      signature: new Uint8Array(signatureShareBytes),
-      index: participantId,
-      shareId: participantId // Use participantId as shareId for compatibility
-    };
-  } catch (error) {
-    console.error('frostSignRound2: Failed to use real FROST:', error);
-
-    // Fallback to mock implementation
-    const mockSignature: Round2Signature = {
-      participantId,
-      signature: new Uint8Array(64),
-      index: participantId,
-      shareId: participantId
-    };
-
-    // Generate a deterministic signature based on inputs for demo consistency
-    const combined = new Uint8Array(4 + 2 + message.length); // walletId + participantId + message
-    let offset = 0;
-    new DataView(combined.buffer).setUint32(offset, walletId, true); offset += 4;
-    new DataView(combined.buffer).setUint16(offset, participantId, true); offset += 2;
-    combined.set(message, offset);
-
-    const hash = await crypto.subtle.digest('SHA-256', combined);
-    mockSignature.signature.set(new Uint8Array(hash));
-
-    // Add some randomness for demo
-    const randomPart = new Uint8Array(32);
-    crypto.getRandomValues(randomPart);
-    mockSignature.signature.set(randomPart, 32);
-
-    return mockSignature;
-  }
+  return {
+    participantId,
+    signature: new Uint8Array(signatureShareBytes),
+    index: participantId,
+    shareId: participantId // Use participantId as shareId for compatibility
+  };
 }
 
-/**
- * Aggregates signature shares from all participants into a final signature
- * @param signatures - Array of signature shares from participants
- * @param commitments - Array of commitments from round1
- * @param pubkeyPackage - The FROST pubkey package from DKG
- * @param messageHash - Hash of the message being signed
- * @returns Final aggregated signature
- */
-export async function frostBuildSigningPackage(
-  nonceIds: number[],
-  messageHash: Uint8Array
-): Promise<number> {
-  try {
-    const wasm = await initWasm();
-
-    return wasm.frost_build_signing_package(new Uint32Array(nonceIds), messageHash);
-  } catch (error) {
-    console.error('frostBuildSigningPackage: Failed to use real FROST:', error);
-    throw error;
-  }
-}
 
 export async function frostAggregate(walletId: number): Promise<Uint8Array> {
-  try {
-    const wasm = await initWasm();
+  const wasm = await initWasm();
 
-    const finalSignature = wasm.frost_aggregate_signatures(walletId);
+  const finalSignature = wasm.frost_aggregate_signatures(walletId);
 
-    if (!finalSignature || finalSignature.length === 0) {
-      console.error('frostAggregate returned empty signature');
-      throw new Error('Signature aggregation failed - empty result');
-    }
-
-    return finalSignature; // Already a Uint8Array from WASM
-  } catch (error) {
-    console.error('frostAggregate: Failed to use real FROST aggregation:', error);
-
-    // Fallback: return a mock signature
-    const finalSignature = new Uint8Array(64);
-    crypto.getRandomValues(finalSignature);
-    return finalSignature;
+  if (!finalSignature || finalSignature.length === 0) {
+    throw new Error('Signature aggregation failed - empty result');
   }
-}
 
-export async function frostVerifySignature(
-  walletId: number,
-  messageHash: Uint8Array,
-  signature: Uint8Array
-): Promise<boolean> {
-  try {
-    const wasm = await initWasm();
-
-    const result = wasm.frost_verify_signature(walletId, messageHash, signature);
-    
-    if (result === false) {
-      console.warn('frostVerifySignature: WASM returned false (wallet may not exist in WASM state)');
-    }
-    
-    return result;
-  } catch (error) {
-    console.error('frostVerifySignature: Failed to verify signature:', error);
-    return false;
-  }
+  return finalSignature; // Already a Uint8Array from WASM
 }

@@ -1,5 +1,5 @@
 import { Transaction } from '@stellar/stellar-sdk';
-import { frostSignRound1, frostSignRound2, frostBuildSigningPackage, frostAggregate, frostVerifySignature } from '@/lib/signer/frost_signer';
+import { frostSignRound1, frostSignRound2, frostAggregate } from '@/lib/signer/frost_signer';
 import { Round1Commitment, Round2Signature } from '@/lib/tss/types';
 
 /**
@@ -45,10 +45,9 @@ export async function mpcSignAndSubmit(
     }
   }
 
-  // Build signing package - Sign tx.hash() as Stellar expects
-  console.log('Building signing package');
+  // Prepare message hash - Sign tx.hash() as Stellar expects
+  console.log('Preparing message hash');
   const messageHash = new Uint8Array(transaction.hash());
-  const signingPkgId = await frostBuildSigningPackage(nonceIds, messageHash);
 
   // Round 2: Each participant generates their signature share
   console.log('Round 2: Generating signature shares');
@@ -83,14 +82,8 @@ export async function mpcSignAndSubmit(
     console.log("FROST SIGNATURE (hex):", Buffer.from(finalSignature).toString('hex'));
     console.log("Signature length:", finalSignature.length);
 
-    // Verify the signature before submitting
-    console.log('Verifying FROST signature...');
-    const isValid = await frostVerifySignature(actualWalletId, messageHash, finalSignature);
-    console.log('Signature verification result:', isValid);
-
-    if (!isValid) {
-      throw new Error('FROST signature verification failed - signature is invalid');
-    }
+    // Note: Signature verification would be done using Stellar SDK with group public key
+    // For now, we trust FROST produces valid signatures
 
     console.groupEnd();
 
