@@ -99,9 +99,12 @@ pub enum Error<C: Ciphersuite> {
     /// Error in coefficient commitment deserialization.
     #[error("Invalid coefficient")]
     InvalidCoefficient,
-    /// The ciphersuite does not support deriving identifiers from strings.
+     /// The ciphersuite does not support deriving identifiers from strings.
     #[error("The ciphersuite does not support deriving identifiers from strings.")]
     IdentifierDerivationNotSupported,
+    /// The identifier is not a valid u16 identifier.
+    #[error("The identifier is not a valid u16 identifier.")]
+    InvalidIdentifier,
     /// Error serializing value.
     #[error("Error serializing value.")]
     SerializationError,
@@ -150,9 +153,10 @@ where
             | Error::UnknownIdentifier
             | Error::IncorrectNumberOfIdentifiers
             | Error::IncorrectNumberOfCommitments
-            | Error::SerializationError
-            | Error::DeserializationError
-            | Error::IdentifierDerivationNotSupported => vec![],
+             | Error::SerializationError
+             | Error::DeserializationError
+             | Error::IdentifierDerivationNotSupported
+             | Error::InvalidIdentifier => vec![],
         }
     }
 }

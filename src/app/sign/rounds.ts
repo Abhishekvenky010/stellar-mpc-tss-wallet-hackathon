@@ -1,12 +1,13 @@
 import { Transaction } from '@stellar/stellar-sdk';
 import { frostSignRound1, frostSignRound2, frostAggregate } from '@/lib/signer/frost_signer';
-import { Round1Commitment, Round2Signature } from '@/lib/tss/types';
+import { Round1Commitment, Round2Signature, MPCError, MPCLogger } from '@/lib/tss/types';
 
 /**
  * MPC Wallet structure containing participant key shares and group public key
  */
 export interface MPCWallet {
-  participants: Map<number, Uint8Array>;  // Map of participant index to key share
+  participants: number[];  // Array of participant IDs (0-based indices)
+  keyShares: Map<number, Uint8Array>;  // Map of participant ID to key share
   groupPublicKey: Uint8Array;            // Group public key
   pubkeyPackage: Uint8Array;              // Public key package for verification
 }
@@ -21,80 +22,117 @@ export async function mpcSignAndSubmit(
   walletId?: number,
   privateKey?: Uint8Array
 ): Promise<string> {
-  console.log('Starting MPC signing process for transaction');
+  MPCLogger.info('MPC', 'Starting MPC signing process', {
+    participantCount: mpcWallet.participants.length,
+    transactionHash: transaction.hash().toString('hex')
+  });
 
   // Use the provided wallet ID or default to 1 for backward compatibility
   const actualWalletId = walletId || 1;
 
   // Round 1: Each participant generates commitments (nonces)
-  console.log('Round 1: Generating commitments');
+  MPCLogger.round1('Starting Round 1: Generating commitments', {
+    participantCount: mpcWallet.participants.length,
+    walletId: actualWalletId
+  });
+
   const round1Commitments: Round1Commitment[] = [];
   const nonceIds: number[] = [];
 
   // For each participant, generate their commitment
-  const participantEntries = Array.from(mpcWallet.participants.entries());
-  for (const [participantIndex, keyShare] of participantEntries) {
+  // WASM uses 1-based participant IDs, so we add 1 to the index
+  for (const participantIndex of mpcWallet.participants) {
     try {
-      const commitment = await frostSignRound1(actualWalletId, participantIndex);
+      // Convert 0-based index to 1-based ID for WASM
+      const wasmParticipantId = participantIndex + 1;
+      const commitment = await frostSignRound1(actualWalletId, wasmParticipantId);
       round1Commitments.push(commitment);
       nonceIds.push(commitment.nonceId); // Use the actual nonce ID returned by WASM
-      console.log(`Participant ${participantIndex}: Generated commitment with nonceId ${commitment.nonceId}`);
+      MPCLogger.round1('Commitment generated for participant', {
+        participantIndex,
+        nonceId: commitment.nonceId,
+        commitmentLength: commitment.commitment.length
+      });
     } catch (error) {
-      console.error(`Participant ${participantIndex}: Failed to generate commitment`, error);
-      throw new Error(`MPC Round 1 failed for participant ${participantIndex}: ${error}`);
+      const mpcError = error instanceof MPCError ? error : MPCError.wasmModuleError('commitment generation', { participantIndex, originalError: error });
+      MPCLogger.error('Round1', `Failed to generate commitment for participant ${participantIndex}`, { error: mpcError.userMessage });
+      throw mpcError;
     }
   }
 
+  MPCLogger.round1('Round 1 completed', {
+    totalCommitments: round1Commitments.length,
+    totalCommitmentBytes: round1Commitments.reduce((sum, c) => sum + c.commitment.length, 0)
+  });
+
   // Prepare message hash - Sign tx.hash() as Stellar expects
-  console.log('Preparing message hash');
   const messageHash = new Uint8Array(transaction.hash());
+  MPCLogger.info('MPC', 'Message hash prepared', {
+    messageHashHex: Buffer.from(messageHash).toString('hex')
+  });
 
   // Round 2: Each participant generates their signature share
-  console.log('Round 2: Generating signature shares');
+  MPCLogger.round2('Starting Round 2: Generating signature shares', {
+    participantCount: mpcWallet.participants.length,
+    messageHashLength: messageHash.length
+  });
+
   const round2Signatures: Round2Signature[] = [];
   const shareIds: number[] = [];
 
-  for (let i = 0; i < participantEntries.length; i++) {
-    const [participantIndex, keyShare] = participantEntries[i];
+  for (let i = 0; i < mpcWallet.participants.length; i++) {
+    const participantIndex = mpcWallet.participants[i];
     try {
+      // Convert 0-based index to 1-based ID for WASM
+      const wasmParticipantId = participantIndex + 1;
       const signatureShare = await frostSignRound2(
         actualWalletId,
-        participantIndex,
+        wasmParticipantId,
         round1Commitments,
         messageHash
       );
 
+      round2Signatures.push(signatureShare);
+      shareIds.push(signatureShare.shareId);
 
-      console.log(`Participant ${participantIndex}: Generated signature share`);
+      MPCLogger.round2('Signature share generated for participant', {
+        participantIndex,
+        signatureLength: signatureShare.signature.length
+      });
     } catch (error) {
-      console.error(`Participant ${participantIndex}: Failed to generate signature share`, error);
-      throw new Error(`MPC Round 2 failed for participant ${participantIndex}: ${error}`);
+      const mpcError = error instanceof MPCError ? error : MPCError.invalidSignatureShare(participantIndex);
+      MPCLogger.error('Round2', `Failed to generate signature share for participant ${participantIndex}`, { error: mpcError.userMessage });
+      throw mpcError;
     }
   }
 
+  MPCLogger.round2('Round 2 completed', {
+    totalSignatures: round2Signatures.length,
+    totalSignatureBytes: round2Signatures.reduce((sum, s) => sum + s.signature.length, 0)
+  });
+
   // Aggregate all signature shares into final signature
-  console.log('Aggregating signature shares');
+  MPCLogger.aggregation('Starting signature aggregation', { walletId: actualWalletId });
   try {
     const finalSignature = await frostAggregate(actualWalletId);
 
-    console.group("✍️ AGGREGATED SIGNATURE");
-    console.log("MESSAGE HASH (hex):", Buffer.from(messageHash).toString('hex'));
-    console.log("FROST SIGNATURE (hex):", Buffer.from(finalSignature).toString('hex'));
-    console.log("Signature length:", finalSignature.length);
-
-    // Note: Signature verification would be done using Stellar SDK with group public key
-    // For now, we trust FROST produces valid signatures
-
-    console.groupEnd();
-
-    console.log('Successfully aggregated and verified signature');
+    MPCLogger.aggregation('Signature aggregation successful', {
+      messageHashHex: Buffer.from(messageHash).toString('hex'),
+      signatureHex: Buffer.from(finalSignature).toString('hex'),
+      signatureLength: finalSignature.length
+    });
 
     // Use the actual FROST signature
-    console.log('Using FROST signature for transaction');
     const signatureHex = Buffer.from(finalSignature).toString('base64');
+    MPCLogger.submission('Prepared signature for transaction submission', {
+      signatureBase64Length: signatureHex.length
+    });
 
     // Submit the transaction to Stellar network with the final signature
-    console.log('Submitting transaction to Stellar network');
+    MPCLogger.submission('Submitting transaction to Stellar network', {
+      network: transaction.networkPassphrase?.includes('Test') ? 'testnet' : 'mainnet',
+      transactionXDRLength: transaction.toXDR().length
+    });
 
     const response = await fetch('/api/submit-transaction', {
       method: 'POST',
@@ -110,18 +148,23 @@ export async function mpcSignAndSubmit(
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Transaction submission failed:', errorText);
-      throw new Error(`Transaction submission failed: ${errorText}`);
+      const mpcError = MPCError.transactionSubmissionFailed({ status: response.status, errorText });
+      MPCLogger.error('Submission', 'Transaction submission failed', { error: mpcError.userMessage, status: response.status });
+      throw mpcError;
     }
 
     const result = await response.json();
-    console.log('Transaction submitted successfully:', result.hash);
+    MPCLogger.submission('Transaction submitted successfully', {
+      transactionHash: result.hash,
+      network: transaction.networkPassphrase?.includes('Test') ? 'testnet' : 'mainnet'
+    });
 
     return result.hash;
 
   } catch (error) {
-    console.error('Failed to aggregate signatures or submit transaction:', error);
-    throw new Error(`MPC signing failed: ${error}`);
+    const mpcError = error instanceof MPCError ? error : MPCError.signatureAggregationFailed(error instanceof Error ? error.message : 'Unknown error');
+    MPCLogger.error('MPC', 'MPC signing process failed', { error: mpcError.userMessage });
+    throw mpcError;
   }
 }
 

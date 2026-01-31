@@ -11,7 +11,7 @@ export async function createMPCSigner(): Promise<MPCSigner> {
   try {
     // Try to import WASM module if available
     // @ts-ignore - WASM module may not exist, fallback to tweetnacl
-    const wasmPath = '/wasm/ed25519_tss_wasm.js';
+    const wasmPath = '../../public/wasm/ed25519_tss_wasm.js';
     console.log('📦 Loading WASM from:', wasmPath);
     // Use computed specifier to avoid bundlers from trying to bundle the wasm at build time
     // eslint-disable-next-line @typescript-eslint/no-implied-eval

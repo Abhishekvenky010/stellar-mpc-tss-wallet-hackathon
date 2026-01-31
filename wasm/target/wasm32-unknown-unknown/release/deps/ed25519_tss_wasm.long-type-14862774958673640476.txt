@@ -1,2 +1,0 @@
-frost_core::identifier::Identifier<Ed25519Sha512>
-&frost_core::identifier::Identifier<Ed25519Sha512>

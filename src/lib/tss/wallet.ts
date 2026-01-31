@@ -1,4 +1,4 @@
-import { TSSWallet, TSSWalletConfig, TSSParticipant, TSSTransaction, TSSKeyShare, TSSSignatureShare, TSSTransactionDetails } from './types';
+import { TSSWallet, TSSWalletConfig, TSSParticipant, TSSTransaction, TSSKeyShare, TSSSignatureShare, TSSTransactionDetails, MPCError, MPCErrorType } from './types';
 import { TSSSigningService } from './signing';
 import { createMPCSigner } from '../mpc/ed25519';
 import { Keypair, StrKey } from '@stellar/stellar-sdk';
@@ -20,17 +20,22 @@ export class StellarTSSWallet {
     threshold: number,
     network: 'mainnet' | 'testnet' | 'futurenet' = 'testnet'
   ): Promise<TSSWallet> {
-    if (threshold > participantIds.length) {
-      throw new Error('Threshold cannot be greater than number of participants');
+    if (participantIds.length < 2 || participantIds.length > 255) {
+      throw MPCError.invalidParticipantCount(participantIds.length);
+    }
+
+    if (threshold <= 0 || threshold > participantIds.length) {
+      throw MPCError.wrongThreshold(threshold, participantIds.length);
     }
 
     // Generate distributed key shares
-    const { publicKey, keyShares } = await this.generateDistributedKey(participantIds.length);
+    const { publicKey, keyShares, walletId } = await this.generateDistributedKey(participantIds.length);
 
     const participants: TSSParticipant[] = participantIds.map((id, index) => ({
       id,
       publicKey: keyShares[index].publicKey,
-      keyShare: keyShares[index]
+      keyShare: keyShares[index],
+      walletId // Store the WASM wallet ID for signing
     }));
 
     // Generate aggregate key deterministically from participant public keys
@@ -65,32 +70,39 @@ export class StellarTSSWallet {
   }
 
   /**
-   * Generate distributed key shares using MPC signers
+   * Generate distributed key shares using FROST DKG
    */
   private async generateDistributedKey(numShares: number): Promise<{
     publicKey: string;
     keyShares: TSSKeyShare[];
+    walletId: number;
   }> {
-    // Create MPC signers for each participant
-    const mpcSigners = await Promise.all(
-      Array(numShares).fill(0).map(() => createMPCSigner())
-    );
+    const { frostDkgInit } = await import('../signer/frost_signer');
 
-    // Use the first signer's public key as the aggregated key (simplified)
-    const publicKey = mpcSigners[0].publicKey;
+    // Create participant IDs (1, 2, 3, ...) - WASM expects 1-based indexing
+    const participantIds = Array.from({ length: numShares }, (_, i) => i + 1);
+    const threshold = Math.ceil(numShares / 2); // Simple majority threshold
 
-    // Create key shares from the MPC signers
-    const keyShares: TSSKeyShare[] = mpcSigners.map((signer, i) => {
-      // Use the actual secret key from the signer
-      return {
-        index: i,
-        share: signer.secretKey,
-        publicKey: signer.publicKey,
-        verificationKey: new Uint8Array(32) // Would be proper verification key
-      };
-    });
+    // Initialize FROST DKG
+    const dkgPackage = await frostDkgInit(participantIds, threshold);
 
-    return { publicKey, keyShares };
+    // Extract public key from the DKG package
+    // Encode the 32-byte group public key as a Stellar account ID
+    const publicKeyBytes = dkgPackage.pubkey;
+    const publicKey = StrKey.encodeEd25519PublicKey(Buffer.from(publicKeyBytes));
+
+    // Create key shares from the DKG package
+    // Map the key shares to their corresponding participant IDs (1-based)
+    const keyShares: TSSKeyShare[] = dkgPackage.keyShares.map((keyShare, i) => ({
+      index: i + 1, // WASM uses 1-based participant IDs
+      share: keyShare.key_share,
+      // The key_share is now the 32-byte verifying share (participant's public key)
+      // Encode it as a Stellar account ID
+      publicKey: StrKey.encodeEd25519PublicKey(Buffer.from(keyShare.key_share)),
+      verificationKey: new Uint8Array(keyShare.key_share) // Store raw bytes for signing
+    }));
+
+    return { publicKey, keyShares, walletId: dkgPackage.walletId! };
   }
 
   /**
@@ -139,12 +151,12 @@ export class StellarTSSWallet {
 
     const participant = this.wallet.participants.find(p => p.id === participantId);
     if (!participant) {
-      throw new Error('Participant not found');
+      throw MPCError.participantMissing(parseInt(participantId) || 0);
     }
 
     // Verify the key share belongs to this participant
     if (!participant.keyShare || !this.arraysEqual(participant.keyShare.share, keyShare.share)) {
-      throw new Error('Invalid key share');
+      throw MPCError.invalidKeyShare(parseInt(participantId) || 0);
     }
 
     // Use TSS signing service for proper cryptographic signing
@@ -238,9 +250,10 @@ export class StellarTSSWallet {
       transaction.status = 'submitted';
       console.log('Transaction submitted successfully:', txId);
     } catch (error) {
-      console.error('Failed to submit transaction:', error);
+      const mpcError = error instanceof MPCError ? error : MPCError.transactionSubmissionFailed({ originalError: error });
+      console.error('Failed to submit transaction:', mpcError.userMessage);
       transaction.status = 'pending';
-      throw error;
+      throw mpcError;
     }
   }
 
@@ -283,17 +296,20 @@ export class StellarTSSWallet {
    * Fund testnet accounts using friendbot
    */
   private async fundTestnetAccounts(publicKeys: string[]): Promise<void> {
-    const fundingPromises = publicKeys.map(async (publicKey) => {
+    const fundingPromises = publicKeys.map(async (publicKeyHex) => {
       try {
-        console.log(`Funding testnet account: ${publicKey}`);
-        const response = await fetch(`https://friendbot.stellar.org?addr=${encodeURIComponent(publicKey)}`);
+        // Convert hex public key to Stellar account ID (G... format)
+        const publicKeyBytes = Buffer.from(publicKeyHex, 'hex');
+        const stellarAccountId = StrKey.encodeEd25519PublicKey(publicKeyBytes);
+        console.log(`Funding testnet account: ${stellarAccountId}`);
+        const response = await fetch(`https://friendbot.stellar.org?addr=${encodeURIComponent(stellarAccountId)}`);
         if (!response.ok) {
-          console.warn(`Failed to fund account ${publicKey}: ${response.status}`);
+          console.warn(`Failed to fund account ${stellarAccountId}: ${response.status}`);
         } else {
-          console.log(`Successfully funded account: ${publicKey}`);
+          console.log(`Successfully funded account: ${stellarAccountId}`);
         }
       } catch (error) {
-        console.warn(`Error funding account ${publicKey}:`, error);
+        console.warn(`Error funding account ${publicKeyHex}:`, error);
       }
     });
 

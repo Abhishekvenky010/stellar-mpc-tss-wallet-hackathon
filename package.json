@@ -8,7 +8,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "build:wasm": "cd wasm && wasm-pack build --target web --out-dir pkg && cd .. && mkdir -p public/wasm && cd public/wasm && if [ ! -e pkg ]; then ln -s ../../wasm/pkg pkg; fi",
+    "server": "node server/mpc-signaling-server.js"
   },
   "dependencies": {
     "@prisma/client": "^7.1.0",
@@ -21,13 +25,17 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "prisma": "^7.1.0",
     "tailwindcss": "^4",
+    "ts-jest": "^29.1.4",
     "typescript": "^5"
   }
 }

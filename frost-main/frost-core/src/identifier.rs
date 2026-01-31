@@ -171,3 +171,37 @@ where
         }
     }
 }
+
+impl<C> TryFrom<Identifier<C>> for u16
+where
+    C: Ciphersuite,
+{
+    type Error = Error<C>;
+
+    fn try_from(identifier: Identifier<C>) -> Result<u16, Self::Error> {
+        let scalar = identifier.to_scalar();
+        let one = <<C::Group as Group>::Field>::one();
+        let mut n: u16 = 1; // Since identifier can't be zero, we start with 1
+        let mut current = one;
+        
+        // Reverse of the double-and-add algorithm used in TryFrom<u16> for Identifier<C>
+        // We need to check if the scalar matches the pattern created by the forward conversion
+        while current != scalar {
+            if n == u16::MAX {
+                return Err(Error::InvalidIdentifier);
+            }
+            n += 1;
+            let mut temp = one;
+            let bits = (n.to_be_bytes().len() as u32) * 8;
+            for i in (0..(bits - n.leading_zeros() - 1)).rev() {
+                temp = temp + temp;
+                if n & (1 << i) != 0 {
+                    temp = temp + one;
+                }
+            }
+            current = temp;
+        }
+        
+        Ok(n)
+    }
+}
