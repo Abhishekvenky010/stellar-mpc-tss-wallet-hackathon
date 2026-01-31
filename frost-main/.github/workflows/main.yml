@@ -1,0 +1,182 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_default:
+    name: build with default features
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6.0.0
+      - uses: dtolnay/rust-toolchain@beta
+      - run: cargo build
+
+  build_latest:
+    name: build with latest versions of dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6.0.0
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo update && cargo build --all-features
+
+  build_msrv:
+    name: build with MSRV (1.81)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6.0.0
+      # Re-resolve Cargo.lock with minimal versions.
+      # This only works with nightly. We pin to a specific version because
+      # newer versions use lock file version 4, but the MSRV cargo does not
+      # support that.
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: nightly-2024-09-20
+      - run: cargo update -Z minimal-versions
+      # Now check that `cargo build` works with respect to the oldest possible
+      # deps and the stated MSRV
+      - uses: dtolnay/rust-toolchain@1.81
+      - run: cargo build --all-features
+
+  # TODO: this is filling up the disk space in CI. See if there is a way to
+  # workaround it.
+
+  # build_all_features:
+  #   name: build all features combinations
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v6.0.0
+  #     - uses: dtolnay/rust-toolchain@stable
+  #     - run: cargo install cargo-all-features
+  #     # We check and then test because some test dependencies could help
+  #     # a bugged build work, while a regular build would fail.
+  #     # Note that this also builds each crate separately, which also helps
+  #     # catching some issues.
+  #     - run: cargo check-all-features
+  #     # Build all tests. We don't run them to save time, since it's unlikely
+  #     # that tests would fail due to feature combinations.
+  #     - run: cargo test-all-features --no-run
+
+  build_no_std:
+    name: build with no_std
+    runs-on: ubuntu-latest
+    # Skip ed448 which does not support it.
+    strategy:
+      matrix:
+        crate: [ristretto255, ed25519, p256, secp256k1, secp256k1-tr, rerandomized]
+    steps:
+    - uses: actions/checkout@v6.0.0
+    - uses: dtolnay/rust-toolchain@master
+      with:
+        toolchain: stable
+        targets: thumbv6m-none-eabi
+    - run: cargo build -p frost-${{ matrix.crate }} --no-default-features --target thumbv6m-none-eabi
+    - run: cargo build -p frost-${{ matrix.crate }} --no-default-features --features serialization --target thumbv6m-none-eabi
+
+  test_beta:
+    name: test on beta
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6.0.0
+      - uses: dtolnay/rust-toolchain@beta
+      - run: cargo test --release --all-features
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6.0.0
+        with:
+          persist-credentials: false
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - name: Check workflow permissions
+        id: check_permissions
+        uses: scherermichael-oss/action-has-permission@1.0.6
+        with:
+          required-permission: write
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run clippy action to produce annotations
+        uses: clechasseur/rs-clippy-check@v5
+        if: ${{ steps.check_permissions.outputs.has-permission }}
+        with:
+          args: --all-features --all-targets -- -D warnings
+
+      - name: Run clippy manually without annotations
+        if: ${{ !steps.check_permissions.outputs.has-permission }}
+        run: cargo clippy --all-features --all-targets -- -D warnings
+
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6.0.0
+        with:
+          persist-credentials: false
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - uses: Swatinem/rust-cache@v2
+
+      - run: cargo fmt --all -- --check
+
+  gencode:
+    name: Check if automatically generated code is up to date
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6.0.0
+        with:
+          persist-credentials: false
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - uses: Swatinem/rust-cache@v2
+
+      - run: cargo run --bin gencode -- --check
+
+  docs:
+    name: Check Rust doc
+    runs-on: ubuntu-latest
+    env:
+      RUSTDOCFLAGS: -D warnings
+
+    steps:
+      - uses: actions/checkout@v6.0.0
+        with:
+          persist-credentials: false
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - run: cargo doc --no-deps --document-private-items --all-features
+
+  actionlint:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v6.0.0
+      - uses: reviewdog/action-actionlint@v1.69.0
+        with:
+          level: warning
+          fail_level: none

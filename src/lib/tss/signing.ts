@@ -5,7 +5,10 @@ import {
   AggSignStepTwoData,
   PartialSignature,
   CompleteSignature,
-  AggregateWallet
+  AggregateWallet,
+  MPCError,
+  MPCErrorType,
+  withRetry
 } from './types';
 import * as nacl from 'tweetnacl';
 
@@ -153,39 +156,54 @@ export class TSSSigningService {
     let currentSequence = '0';
 
     try {
-      const accountResponse = await fetch(`${horizonUrl}/accounts/${aggregateWallet.aggregatedPublicKey}`);
-      if (accountResponse.ok) {
-        const accountData = await accountResponse.json();
-        currentSequence = accountData.sequence;
-        accountExists = true;
-        console.log('✅ Aggregate account exists on Stellar network');
-      }
+      const accountData = await withRetry(async () => {
+        const response = await fetch(`${horizonUrl}/accounts/${aggregateWallet.aggregatedPublicKey}`);
+        if (!response.ok) {
+          throw MPCError.networkFailure('account lookup', { status: response.status, url: `${horizonUrl}/accounts/${aggregateWallet.aggregatedPublicKey}` });
+        }
+        return response.json();
+      });
+      currentSequence = accountData.sequence;
+      accountExists = true;
+      console.log('✅ Aggregate account exists on Stellar network');
     } catch (error) {
-      console.log('Aggregate account does not exist, will create and fund it');
+      if (error instanceof MPCError && error.type === MPCErrorType.NETWORK_FAILURE) {
+        console.log('Aggregate account does not exist, will create and fund it');
+      } else {
+        throw error;
+      }
     }
 
     // If account doesn't exist on testnet, fund it via Friendbot
     if (!accountExists && transactionDetails.network === 'testnet') {
       console.log('🔄 Funding aggregate account via Friendbot...');
       try {
-        const friendbotResponse = await fetch(`https://friendbot.stellar.org/?addr=${encodeURIComponent(aggregateWallet.aggregatedPublicKey)}`);
-        if (friendbotResponse.ok) {
-          console.log('✅ Account funded successfully via Friendbot');
-          // Wait for the transaction to be processed
-          await new Promise(resolve => setTimeout(resolve, 5000));
-
-          // Re-fetch account info
-          const accountResponse = await fetch(`${horizonUrl}/accounts/${aggregateWallet.aggregatedPublicKey}`);
-          if (accountResponse.ok) {
-            const accountData = await accountResponse.json();
-            currentSequence = accountData.sequence;
-            accountExists = true;
+        await withRetry(async () => {
+          const response = await fetch(`https://friendbot.stellar.org/?addr=${encodeURIComponent(aggregateWallet.aggregatedPublicKey)}`);
+          if (!response.ok) {
+            throw MPCError.networkFailure('Friendbot funding', { status: response.status });
           }
-        } else {
-          throw new Error('Friendbot funding failed');
-        }
+          return response;
+        });
+
+        console.log('✅ Account funded successfully via Friendbot');
+        // Wait for the transaction to be processed
+        await new Promise(resolve => setTimeout(resolve, 5000));
+
+        // Re-fetch account info with retry
+        const accountData = await withRetry(async () => {
+          const response = await fetch(`${horizonUrl}/accounts/${aggregateWallet.aggregatedPublicKey}`);
+          if (!response.ok) {
+            throw MPCError.networkFailure('account refetch after funding', { status: response.status });
+          }
+          return response.json();
+        });
+
+        currentSequence = accountData.sequence;
+        accountExists = true;
       } catch (error) {
-        console.error('Failed to fund account via Friendbot:', error);
+        const mpcError = error instanceof MPCError ? error : MPCError.networkFailure('account funding', { originalError: error });
+        console.error('Failed to fund account via Friendbot:', mpcError.userMessage);
         throw new Error('Could not fund the aggregate account. Please ensure it has sufficient XLM balance.');
       }
     }
@@ -198,8 +216,14 @@ export class TSSSigningService {
       );
     }
 
-    // Check account balance
-    const accountData = await (await fetch(`${horizonUrl}/accounts/${aggregateWallet.aggregatedPublicKey}`)).json();
+    // Check account balance with retry
+    const accountData = await withRetry(async () => {
+      const response = await fetch(`${horizonUrl}/accounts/${aggregateWallet.aggregatedPublicKey}`);
+      if (!response.ok) {
+        throw MPCError.networkFailure('balance check', { status: response.status });
+      }
+      return response.json();
+    });
     const balance = accountData.balances.find((b: any) => b.asset_type === 'native')?.balance || '0';
     console.log('💰 Account balance:', balance, 'XLM');
 
@@ -285,14 +309,28 @@ export class TSSSigningService {
     // Submit directly to Stellar Horizon (bypassing API route for debugging)
     console.log('🌐 Submitting directly to Stellar Horizon...');
     try {
-      const submitResponse = await fetch(`${horizonUrl}/transactions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          tx: txXDR
-        })
+      const submitResponse = await withRetry(async () => {
+        const response = await fetch(`${horizonUrl}/transactions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({
+            tx: txXDR
+          })
+        });
+
+        if (!response.ok) {
+          const responseText = await response.text();
+          throw MPCError.transactionSubmissionFailed({
+            status: response.status,
+            statusText: response.statusText,
+            responseText,
+            xdr: txXDR.substring(0, 200) + '...'
+          });
+        }
+
+        return response;
       });
 
       console.log('📡 Horizon response received:', {
@@ -300,25 +338,6 @@ export class TSSSigningService {
         status: submitResponse.status,
         statusText: submitResponse.statusText
       });
-
-      if (!submitResponse.ok) {
-        let errorData;
-        const responseText = await submitResponse.text();
-        console.log('Raw Horizon response:', responseText);
-
-        try {
-          errorData = JSON.parse(responseText);
-        } catch (e) {
-          errorData = { text: responseText, status: submitResponse.status };
-        }
-        console.error('❌ Stellar blockchain submission failed:', {
-          status: submitResponse.status,
-          statusText: submitResponse.statusText,
-          errorData,
-          xdr: txXDR.substring(0, 200) + '...'
-        });
-        throw new Error(`Transaction submission failed: ${errorData.detail || errorData.title || errorData.text || 'Unknown error'}`);
-      }
 
       const result = await submitResponse.json();
       console.log('🎉 TSS Transaction accepted by Stellar blockchain!');

@@ -11,8 +11,10 @@ wasm-bindgen = "0.2"
 ed25519-dalek = "1"
 curve25519-dalek = "3"
 getrandom = { version = "0.2", features = ["js"] }
+frost-ed25519 = { path = "../frost-main/frost-ed25519" }
+postcard = "1"
+rand = { version = "0.8", features = ["getrandom"] }
+lazy_static = "1.4"
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = false
-
-

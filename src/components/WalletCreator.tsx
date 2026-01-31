@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { StellarTSSWallet } from '@/lib/tss/wallet';
 import { TSSWallet } from '@/lib/tss/types';
-import { serializeWallets } from '@/lib/utils';
+import { storeWallets, loadWallets } from '@/lib/storage';
 
 interface WalletCreatorProps {
   onWalletCreated: (wallet: TSSWallet) => void;
@@ -32,6 +32,11 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
   };
 
   const handleCreateWallet = async () => {
+    console.log('=== handleCreateWallet clicked ===');
+    console.log('Participants:', participantIds);
+    console.log('Threshold:', threshold);
+    console.log('Network:', network);
+
     if (participantIds.length < 2) {
       alert('Need at least 2 participants');
       return;
@@ -48,13 +53,13 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
       const walletInstance = new StellarTSSWallet(network);
       const wallet = await walletInstance.createWallet(participantIds, threshold, network);
 
-      // Save to localStorage for demo
-      const savedWallets = JSON.parse(localStorage.getItem('tss-wallets') || '[]');
-      savedWallets.push(wallet);
+      // Save to secure storage
+      const existingWallets = await loadWallets();
+      const updatedWallets = [...existingWallets, wallet];
       try {
-        localStorage.setItem('tss-wallets', serializeWallets(savedWallets));
+        await storeWallets(updatedWallets);
       } catch (error) {
-        console.warn('Failed to save wallets to localStorage:', error);
+        console.warn('Failed to save wallet:', error);
       }
 
       onWalletCreated(wallet);
@@ -67,45 +72,51 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-6 sm:px-0">
+    <div className="px-4 py-6 sm:px-0">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Create TSS Wallet</h2>
-          <p className="text-gray-600">Set up your multi-party cryptographic wallet</p>
+          <h2 className="text-4xl font-bold gradient-text text-glow mb-2">Create TSS Wallet</h2>
+          <p className="text-gray-400">Set up your multi-party cryptographic wallet</p>
         </div>
 
-        <div className="bg-white shadow-lg rounded-xl p-8 space-y-8 border border-gray-200">
+        <div className="card shadow-lg rounded-xl p-8 space-y-8">
           {/* Network Selection */}
           <div className="space-y-3">
-            <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">
+            <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
               Network
             </label>
             <select
               value={network}
               onChange={(e) => setNetwork(e.target.value as any)}
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 input-field"
             >
-              <option value="testnet">Testnet</option>
-              <option value="mainnet">Mainnet</option>
-              <option value="futurenet">Futurenet</option>
+              <option value="testnet" className="bg-gray-800">Testnet</option>
+              <option value="mainnet" className="bg-gray-800">Mainnet</option>
+              <option value="futurenet" className="bg-gray-800">Futurenet</option>
             </select>
           </div>
 
           {/* Threshold */}
           <div className="space-y-4">
-            <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">
+            <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
               Signature Threshold ({threshold}-of-{participantIds.length})
             </label>
-            <input
-              type="range"
-              min="1"
-              max={participantIds.length}
-              value={threshold}
-              onChange={(e) => setThreshold(parseInt(e.target.value))}
-              className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb"
-            />
+            <div className="relative">
+              <input
+                type="range"
+                min="1"
+                max={participantIds.length}
+                value={threshold}
+                onChange={(e) => setThreshold(parseInt(e.target.value))}
+                className="w-full h-3 bg-white/10 rounded-lg appearance-none cursor-pointer slider-thumb"
+                style={{
+                  background: `linear-gradient(to right, #667eea 0%, #667eea ${((threshold - 1) / (participantIds.length - 1)) * 100}%, rgba(255,255,255,0.1) ${((threshold - 1) / (participantIds.length - 1)) * 100}%, rgba(255,255,255,0.1) 100%)`
+                }}
+              />
+            </div>
             <div className="flex justify-between text-sm text-gray-500">
               <span>1</span>
+              <span className="text-white font-medium">{threshold} required</span>
               <span>{participantIds.length}</span>
             </div>
           </div>
@@ -113,12 +124,12 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
           {/* Participants */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">
+              <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
                 Participants
               </label>
               <button
                 onClick={addParticipant}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-gray-50 hover:bg-gray-100 transition-all duration-200"
+                className="btn-accent inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg"
               >
                 + Add Participant
               </button>
@@ -133,13 +144,13 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
                       value={participant}
                       onChange={(e) => updateParticipant(index, e.target.value)}
                       placeholder={`Participant ${index + 1}`}
-                      className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 input-field"
                     />
                   </div>
                   {participantIds.length > 2 && (
                     <button
                       onClick={() => removeParticipant(index)}
-                      className="inline-flex items-center px-3 py-3 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-gray-50 hover:bg-gray-100 transition-all duration-200"
+                      className="inline-flex items-center px-3 py-3 border border-red-500/30 text-red-400 hover:text-red-300 hover:border-red-500/50 rounded-lg transition-all duration-200"
                     >
                       ✕
                     </button>
@@ -150,32 +161,32 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
           </div>
 
           {/* Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-6">
             <div className="flex items-start">
               <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-blue-600 text-lg">🔐</span>
+                <div className="w-10 h-10 gradient-bg rounded-full flex items-center justify-center glow">
+                  <span className="text-white text-xl">🔐</span>
                 </div>
               </div>
               <div className="ml-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                <h3 className="text-lg font-semibold text-white mb-3">
                   MPC/TSS Wallet Features
                 </h3>
-                <div className="text-sm text-gray-600 space-y-2">
+                <div className="text-sm text-gray-400 space-y-2">
                   <div className="flex items-center">
-                    <span className="text-green-600 mr-2">✓</span>
+                    <span className="text-green-400 mr-2">✓</span>
                     <span>Distributed key generation with secret sharing</span>
                   </div>
                   <div className="flex items-center">
-                    <span className="text-green-600 mr-2">✓</span>
+                    <span className="text-green-400 mr-2">✓</span>
                     <span>Threshold signatures ({threshold}-of-{participantIds.length} required)</span>
                   </div>
                   <div className="flex items-center">
-                    <span className="text-green-600 mr-2">✓</span>
+                    <span className="text-green-400 mr-2">✓</span>
                     <span>No single point of failure</span>
                   </div>
                   <div className="flex items-center">
-                    <span className="text-green-600 mr-2">✓</span>
+                    <span className="text-green-400 mr-2">✓</span>
                     <span>Secure key share distribution</span>
                   </div>
                 </div>
@@ -188,7 +199,7 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
             <button
               onClick={handleCreateWallet}
               disabled={creating}
-              className="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600 transition-all duration-200 shadow-lg"
+              className="inline-flex items-center px-8 py-4 border border-transparent text-base font-semibold rounded-xl text-white btn-primary disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:transform-none shadow-lg"
             >
               {creating ? (
                 <>
@@ -196,7 +207,7 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
                   Creating...
                 </>
               ) : (
-                'Create TSS Wallet'
+                '✨ Create TSS Wallet'
               )}
             </button>
           </div>

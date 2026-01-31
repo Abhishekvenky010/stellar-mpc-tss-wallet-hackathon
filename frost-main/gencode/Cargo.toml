@@ -1,0 +1,16 @@
+[package]
+name = "gencode"
+version = "0.1.0"
+edition.workspace = true
+publish = false
+
+[dependencies]
+regex = "1.6.0"
+serde_json.workspace = true
+
+[[bin]]
+name = "gencode"
+path = "src/main.rs"
+# Disables non-criterion benchmark which is not used; prevents errors
+# when using criterion-specific flags
+bench = false
