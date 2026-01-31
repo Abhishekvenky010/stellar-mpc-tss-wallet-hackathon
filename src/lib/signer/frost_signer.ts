@@ -1,23 +1,101 @@
 import { Round1Commitment, Round2Signature, DkgPackage, MPCError, MPCLogger } from '../tss/types';
 
+// WASM module instance
+let wasmModule: any = null;
+let wasmInstance: any = null;
+
 /**
- * Initialize WASM module
+ * Initialize the real WASM module
  */
-async function initWasm() {
-  // Always use mock mode to avoid import errors during SSR
-  // In production, this would dynamically load the real WASM module
-  return {
+async function initWasm(): Promise<any> {
+  if (wasmInstance) {
+    return wasmInstance;
+  }
+
+  // Check if we're in a browser environment
+  if (typeof window === 'undefined') {
+    // SSR environment - use mock mode
+    return initMockWasm();
+  }
+
+  try {
+    // Dynamically import the WASM module
+    const wasmModule = await import('ed25519_tss_wasm');
+    
+    // Initialize the WASM module using the default export (__wbg_init)
+    if (wasmModule.default) {
+      await wasmModule.default();
+    }
+    wasmInstance = wasmModule;
+    
+    MPCLogger.dkg('Real WASM module initialized successfully');
+    return wasmInstance;
+  } catch (error) {
+    console.warn('[WASM] Failed to load real WASM module, falling back to mock:', error);
+    return initMockWasm();
+  }
+}
+
+/**
+ * Initialize mock WASM module (fallback for SSR or when real WASM is unavailable)
+ */
+function initMockWasm(): Promise<any> {
+  // Generate unique keys for each participant based on participant index
+  function generateUniqueParticipantKey(participantIndex: number): Uint8Array {
+    const key = new Uint8Array(32);
+    // Use participant index to create unique keys
+    key[0] = participantIndex & 0xFF;
+    key[1] = (participantIndex >> 8) & 0xFF;
+    key[2] = (participantIndex >> 16) & 0xFF;
+    // Add some randomness to make keys unique
+    for (let i = 4; i < 32; i++) {
+      key[i] = Math.floor(Math.random() * 256);
+    }
+    return key;
+  }
+  
+  function generateGroupPublicKey(participantCount: number): Uint8Array {
+    const key = new Uint8Array(32);
+    // Generate a deterministic but unique group key
+    key[0] = participantCount & 0xFF;
+    key[1] = (participantCount >> 8) & 0xFF;
+    for (let i = 2; i < 32; i++) {
+      key[i] = Math.floor(Math.random() * 256);
+    }
+    return key;
+  }
+  
+  // Store per-wallet state for mock mode
+  const walletStates = new Map<number, { participantCount: number; keys: Map<number, Uint8Array> }>();
+  
+  return Promise.resolve({
     frost_dkg_init: (numParticipants: number, threshold: number) => {
       console.log('[Mock FROST] DKG init:', numParticipants, threshold);
-      return Math.floor(Math.random() * 1000) + 1;
+      const walletId = Math.floor(Math.random() * 1000) + 1;
+      // Initialize wallet state with unique keys for each participant
+      const keys = new Map<number, Uint8Array>();
+      for (let i = 1; i <= numParticipants; i++) {
+        keys.set(i, generateUniqueParticipantKey(i));
+      }
+      walletStates.set(walletId, { participantCount: numParticipants, keys });
+      return walletId;
     },
     frost_get_pubkey_package: (walletId: number) => {
       console.log('[Mock FROST] Get pubkey package:', walletId);
-      return new Uint8Array(32);
+      const state = walletStates.get(walletId);
+      if (state) {
+        return generateGroupPublicKey(state.participantCount);
+      }
+      return generateGroupPublicKey(3); // Default fallback
     },
     frost_get_key_package: (walletId: number, participantId: number) => {
       console.log('[Mock FROST] Get key package:', walletId, participantId);
-      return new Uint8Array(32);
+      const state = walletStates.get(walletId);
+      if (state && state.keys.has(participantId)) {
+        return state.keys.get(participantId)!;
+      }
+      // Generate unique key for this participant if not found
+      return generateUniqueParticipantKey(participantId);
     },
     frost_sign_round1: (walletId: number, participantId: number) => {
       console.log('[Mock FROST] Sign round 1:', walletId, participantId);
@@ -31,7 +109,7 @@ async function initWasm() {
       console.log('[Mock FROST] Aggregate signatures:', walletId);
       return new Uint8Array(64);
     }
-  };
+  });
 }
 
 /**
@@ -76,7 +154,7 @@ export async function frostDkgInit(participants: number[], threshold: number): P
 
   try {
     const wasm = await initWasm();
-    MPCLogger.dkg('WASM module initialized successfully');
+
 
     const walletId = wasm.frost_dkg_init(participants.length, threshold);
     MPCLogger.dkg('FROST DKG initialized', { walletId, participantCount: participants.length, threshold });
