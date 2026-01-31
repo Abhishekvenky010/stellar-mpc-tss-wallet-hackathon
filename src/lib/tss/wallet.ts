@@ -93,14 +93,27 @@ export class StellarTSSWallet {
 
     // Create key shares from the DKG package
     // Map the key shares to their corresponding participant IDs (1-based)
-    const keyShares: TSSKeyShare[] = dkgPackage.keyShares.map((keyShare, i) => ({
-      index: i + 1, // WASM uses 1-based participant IDs
-      share: keyShare.key_share,
-      // The key_share is now the 32-byte verifying share (participant's public key)
-      // Encode it as a Stellar account ID
-      publicKey: StrKey.encodeEd25519PublicKey(Buffer.from(keyShare.key_share)),
-      verificationKey: new Uint8Array(keyShare.key_share) // Store raw bytes for signing
-    }));
+    const keyShares: TSSKeyShare[] = dkgPackage.keyShares.map((keyShare, i) => {
+      // Derive a valid Ed25519 keypair from the DKG key share
+      // The key_share bytes are the secret scalar for this participant's share
+      // We need to derive both the secret (for signing) and public key (for verification)
+      const secretKeyBytes = keyShare.key_share;
+      
+      // Create a keypair from the secret key bytes
+      // The first 32 bytes are the secret key, the public key is derived from it
+      const secretKey = secretKeyBytes.slice(0, 32);
+      const participantKeypair = Keypair.fromRawEd25519Seed(Buffer.from(secretKey));
+      
+      // Convert public key to bytes for verificationKey
+      const publicKeyBytes = StrKey.decodeEd25519PublicKey(participantKeypair.publicKey());
+      
+      return {
+        index: i + 1, // WASM uses 1-based participant IDs
+        share: keyShare.key_share,
+        publicKey: participantKeypair.publicKey(),
+        verificationKey: publicKeyBytes
+      };
+    });
 
     return { publicKey, keyShares, walletId: dkgPackage.walletId! };
   }
@@ -296,20 +309,18 @@ export class StellarTSSWallet {
    * Fund testnet accounts using friendbot
    */
   private async fundTestnetAccounts(publicKeys: string[]): Promise<void> {
-    const fundingPromises = publicKeys.map(async (publicKeyHex) => {
+    const fundingPromises = publicKeys.map(async (publicKey) => {
       try {
-        // Convert hex public key to Stellar account ID (G... format)
-        const publicKeyBytes = Buffer.from(publicKeyHex, 'hex');
-        const stellarAccountId = StrKey.encodeEd25519PublicKey(publicKeyBytes);
-        console.log(`Funding testnet account: ${stellarAccountId}`);
-        const response = await fetch(`https://friendbot.stellar.org?addr=${encodeURIComponent(stellarAccountId)}`);
+        // Public key is already in Stellar account ID format (G...)
+        console.log(`Funding testnet account: ${publicKey}`);
+        const response = await fetch(`https://friendbot.stellar.org?addr=${encodeURIComponent(publicKey)}`);
         if (!response.ok) {
-          console.warn(`Failed to fund account ${stellarAccountId}: ${response.status}`);
+          console.warn(`Failed to fund account ${publicKey}: ${response.status}`);
         } else {
-          console.log(`Successfully funded account: ${stellarAccountId}`);
+          console.log(`Successfully funded account: ${publicKey}`);
         }
       } catch (error) {
-        console.warn(`Error funding account ${publicKeyHex}:`, error);
+        console.warn(`Error funding account ${publicKey}:`, error);
       }
     });
 
