@@ -30,9 +30,7 @@
 *.swp
 
 # WASM builds
-wasm/pkg/
 wasm/target/
-public/wasm/pkg/
 *.swo
 *~
 
