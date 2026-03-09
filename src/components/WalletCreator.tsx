@@ -76,29 +76,29 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold gradient-text text-glow mb-2">Create TSS Wallet</h2>
-          <p className="text-gray-400">Set up your multi-party cryptographic wallet</p>
+          <p className="text-gray-600">Set up your multi-party cryptographic wallet</p>
         </div>
 
         <div className="card shadow-lg rounded-xl p-8 space-y-8">
           {/* Network Selection */}
           <div className="space-y-3">
-            <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
+            <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">
               Network
             </label>
             <select
               value={network}
               onChange={(e) => setNetwork(e.target.value as any)}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 input-field"
+              className="w-full px-4 py-3 bg-white/5 border border-gray/20 rounded-lg text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 input-field"
             >
-              <option value="testnet" className="bg-gray-800">Testnet</option>
-              <option value="mainnet" className="bg-gray-800">Mainnet</option>
-              <option value="futurenet" className="bg-gray-800">Futurenet</option>
+              <option value="testnet" className="bg-white text-gray-800">Testnet</option>
+              <option value="mainnet" className="bg-white text-gray-800">Mainnet</option>
+              <option value="futurenet" className="bg-white text-gray-800">Futurenet</option>
             </select>
           </div>
 
           {/* Threshold */}
           <div className="space-y-4">
-            <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
+            <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">
               Signature Threshold ({threshold}-of-{participantIds.length})
             </label>
             <div className="relative">
@@ -114,9 +114,9 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
                 }}
               />
             </div>
-            <div className="flex justify-between text-sm text-gray-500">
+            <div className="flex justify-between text-sm text-gray-600">
               <span>1</span>
-              <span className="text-white font-medium">{threshold} required</span>
+              <span className="text-gray-800 font-medium">{threshold} required</span>
               <span>{participantIds.length}</span>
             </div>
           </div>
@@ -124,7 +124,7 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
           {/* Participants */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="block text-sm font-semibold text-gray-300 uppercase tracking-wide">
+              <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">
                 Participants
               </label>
               <button
@@ -144,7 +144,7 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
                       value={participant}
                       onChange={(e) => updateParticipant(index, e.target.value)}
                       placeholder={`Participant ${index + 1}`}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 input-field"
+                      className="w-full px-4 py-3 bg-white/5 border border-gray/20 rounded-lg text-gray-800 placeholder-gray-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 input-field"
                     />
                   </div>
                   {participantIds.length > 2 && (
@@ -169,24 +169,24 @@ export default function WalletCreator({ onWalletCreated }: WalletCreatorProps) {
                 </div>
               </div>
               <div className="ml-4">
-                <h3 className="text-lg font-semibold text-white mb-3">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">
                   MPC/TSS Wallet Features
                 </h3>
-                <div className="text-sm text-gray-400 space-y-2">
+                <div className="text-sm text-gray-600 space-y-2">
                   <div className="flex items-center">
-                    <span className="text-green-400 mr-2">✓</span>
+                    <span className="text-green-600 mr-2">✓</span>
                     <span>Distributed key generation with secret sharing</span>
                   </div>
                   <div className="flex items-center">
-                    <span className="text-green-400 mr-2">✓</span>
+                    <span className="text-green-600 mr-2">✓</span>
                     <span>Threshold signatures ({threshold}-of-{participantIds.length} required)</span>
                   </div>
                   <div className="flex items-center">
-                    <span className="text-green-400 mr-2">✓</span>
+                    <span className="text-green-600 mr-2">✓</span>
                     <span>No single point of failure</span>
                   </div>
                   <div className="flex items-center">
-                    <span className="text-green-400 mr-2">✓</span>
+                    <span className="text-green-600 mr-2">✓</span>
                     <span>Secure key share distribution</span>
                   </div>
                 </div>

@@ -14,7 +14,9 @@ async function testWasmModule() {
     const wasmPath = path.join(__dirname, '..', 'wasm', 'pkg', 'ed25519_tss_wasm.js');
     console.log('Loading WASM from:', wasmPath);
     
-    const wasmModule = await import(wasmPath);
+    // Convert Windows path to file URL
+    const wasmUrl = `file://${wasmPath.replace(/\\/g, '/')}`;
+    const wasmModule = await import(wasmUrl);
     await wasmModule.default();
     console.log('✅ WASM module loaded successfully\n');
 

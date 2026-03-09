@@ -7,6 +7,7 @@ import ParticipantShareExport from '@/components/ParticipantShareExport';
 import ParticipantShareImport from '@/components/ParticipantShareImport';
 import NetworkConnection from '@/components/NetworkConnection';
 import DeviceManager from '@/components/DeviceManager';
+import WalletCreator from '@/components/WalletCreator';
 
 interface WalletDashboardProps {
   onWalletSelect: (wallet: TSSWallet) => void;
@@ -20,6 +21,7 @@ export default function WalletDashboard({ onWalletSelect }: WalletDashboardProps
   const [showShareImport, setShowShareImport] = useState(false);
   const [showDeviceManager, setShowDeviceManager] = useState(false);
   const [deviceManagerWallet, setDeviceManagerWallet] = useState<TSSWallet | null>(null);
+  const [showWalletCreator, setShowWalletCreator] = useState(false);
 
   useEffect(() => {
     // Load wallets from secure storage
@@ -124,18 +126,21 @@ export default function WalletDashboard({ onWalletSelect }: WalletDashboardProps
         </div>
 
         {wallets.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="card rounded-2xl p-12 max-w-md mx-auto">
-              <div className="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6 glow">
-                <span className="text-4xl">🔐</span>
+            <div className="text-center py-16">
+              <div className="card rounded-2xl p-12 max-w-md mx-auto">
+                <div className="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-6 glow">
+                  <span className="text-4xl">🔐</span>
+                </div>
+                <h3 className="text-2xl font-bold gradient-text mb-4">No wallets found</h3>
+                <p className="text-gray-600 mb-8">Create your first MPC/TSS wallet to get started with secure distributed cryptography</p>
+                <button 
+                  className="btn-primary px-8 py-3 text-white font-medium rounded-lg text-lg"
+                  onClick={() => setShowWalletCreator(true)}
+                >
+                  Create Your First Wallet
+                </button>
               </div>
-              <h3 className="text-2xl font-bold gradient-text mb-4">No wallets found</h3>
-              <p className="text-gray-400 mb-8">Create your first MPC/TSS wallet to get started with secure distributed cryptography</p>
-              <button className="btn-primary px-8 py-3 text-white font-medium rounded-lg text-lg">
-                Create Your First Wallet
-              </button>
             </div>
-          </div>
         ) : (
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {wallets.map((wallet, index) => (
@@ -154,20 +159,20 @@ export default function WalletDashboard({ onWalletSelect }: WalletDashboardProps
                       </div>
                     </div>
                     <div className="ml-4">
-                      <h3 className="text-xl font-semibold text-white">
+                      <h3 className="text-xl font-semibold text-gray-800">
                         TSS Wallet #{index + 1}
                       </h3>
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-gray-600 text-sm">
                         {wallet.config.threshold}-of-{wallet.participants.length} threshold
                       </p>
                     </div>
                   </div>
 
                   <div className="space-y-3">
-                    <div className="flex justify-between items-center py-2 border-b border-white/10">
-                      <span className="text-gray-400 text-sm">Public Key</span>
+                    <div className="flex justify-between items-center py-2 border-b border-gray/20">
+                      <span className="text-gray-600 text-sm">Public Key</span>
                       <div className="flex items-center space-x-2">
-                        <span className="text-gray-500 font-mono text-sm">
+                        <span className="text-gray-700 font-mono text-sm">
                           {wallet.config.publicKey.toString().slice(0, 8)}...
                         </span>
                         <button
@@ -175,37 +180,37 @@ export default function WalletDashboard({ onWalletSelect }: WalletDashboardProps
                             e.stopPropagation();
                             navigator.clipboard.writeText(wallet.config.publicKey.toString());
                           }}
-                          className="text-gray-500 hover:text-white transition-colors text-xs"
+                          className="text-gray-500 hover:text-gray-800 transition-colors text-xs"
                           title="Copy full public key"
                         >
                           📋
                         </button>
                       </div>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-white/10">
-                      <span className="text-gray-400 text-sm">Network</span>
-                      <span className="text-white text-sm capitalize">{wallet.config.network}</span>
+                    <div className="flex justify-between items-center py-2 border-b border-gray/20">
+                      <span className="text-gray-600 text-sm">Network</span>
+                      <span className="text-gray-800 text-sm capitalize">{wallet.config.network}</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-white/10">
-                      <span className="text-gray-400 text-sm">Participants</span>
-                      <span className="text-white text-sm">{wallet.participants.length}</span>
+                    <div className="flex justify-between items-center py-2 border-b border-gray/20">
+                      <span className="text-gray-600 text-sm">Participants</span>
+                      <span className="text-gray-800 text-sm">{wallet.participants.length}</span>
                     </div>
                     <div className="flex justify-between items-center py-2">
-                      <span className="text-gray-400 text-sm">Transactions</span>
-                      <span className="text-white text-sm">{wallet.transactions.length}</span>
+                      <span className="text-gray-600 text-sm">Transactions</span>
+                      <span className="text-gray-800 text-sm">{wallet.transactions.length}</span>
                     </div>
 
                     {wallet.transactions.length > 0 && (
-                      <div className="mt-4 p-3 bg-white/5 rounded-lg">
-                        <p className="text-xs text-gray-500 mb-2">Transaction Status</p>
+                      <div className="mt-4 p-3 bg-gray/5 rounded-lg">
+                        <p className="text-xs text-gray-600 mb-2">Transaction Status</p>
                         <div className="flex justify-between text-xs">
-                          <span className="text-yellow-400">
+                          <span className="text-yellow-600">
                             Pending: {wallet.transactions.filter(t => t.status === 'pending' || t.status === 'collecting').length}
                           </span>
-                          <span className="text-blue-400">
+                          <span className="text-blue-600">
                             Signed: {wallet.transactions.filter(t => t.status === 'signed').length}
                           </span>
-                          <span className="text-green-400">
+                          <span className="text-green-600">
                             Submitted: {wallet.transactions.filter(t => t.status === 'submitted').length}
                           </span>
                         </div>
@@ -214,8 +219,8 @@ export default function WalletDashboard({ onWalletSelect }: WalletDashboardProps
                   </div>
 
                   <div className="mt-6 flex justify-between items-center">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">
-                      <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-600 border border-green-500/30">
+                      <div className="w-2 h-2 bg-green-600 rounded-full mr-2 animate-pulse"></div>
                       Active
                     </span>
                     <div className="flex space-x-3">
@@ -226,7 +231,7 @@ export default function WalletDashboard({ onWalletSelect }: WalletDashboardProps
                             const friendbotUrl = `https://friendbot.stellar.org?addr=${encodeURIComponent(wallet.config.publicKey.toString())}`;
                             window.open(friendbotUrl, '_blank');
                           }}
-                          className="text-orange-400 hover:text-orange-300 text-sm font-medium transition-colors"
+                          className="text-orange-600 hover:text-orange-700 text-sm font-medium transition-colors"
                           title="Fund with Friendbot (Testnet only)"
                         >
                           💰 Fund
@@ -237,7 +242,7 @@ export default function WalletDashboard({ onWalletSelect }: WalletDashboardProps
                           e.stopPropagation();
                           setShowShareExport(wallet);
                         }}
-                        className="text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors"
+                        className="text-purple-600 hover:text-purple-700 text-sm font-medium transition-colors"
                         title="Export participant shares for multi-device signing"
                       >
                         🔗 Share
@@ -247,7 +252,7 @@ export default function WalletDashboard({ onWalletSelect }: WalletDashboardProps
                           e.stopPropagation();
                           setSelectedWalletDetails(wallet);
                         }}
-                        className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
+                        className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors"
                       >
                         View Details →
                       </button>
@@ -257,7 +262,7 @@ export default function WalletDashboard({ onWalletSelect }: WalletDashboardProps
                           setDeviceManagerWallet(wallet);
                           setShowDeviceManager(true);
                         }}
-                        className="text-green-400 hover:text-green-300 text-sm font-medium transition-colors"
+                        className="text-green-600 hover:text-green-700 text-sm font-medium transition-colors"
                         title="Manage devices and refresh shares"
                       >
                         📱 Devices
@@ -419,6 +424,35 @@ export default function WalletDashboard({ onWalletSelect }: WalletDashboardProps
                   onParticipantImported={(participant) => {
                     console.log('Imported participant:', participant);
                     setShowShareImport(false);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Wallet Creator */}
+        {showWalletCreator && (
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="card rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6 border-b border-white/10">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-bold gradient-text">Create TSS Wallet</h2>
+                  <button
+                    onClick={() => setShowWalletCreator(false)}
+                    className="text-gray-400 hover:text-white text-3xl transition-colors"
+                  >
+                    ×
+                  </button>
+                </div>
+              </div>
+              <div className="p-6">
+                <WalletCreator 
+                  onWalletCreated={(wallet) => {
+                    // Add the new wallet to the list
+                    saveWallets([...wallets, wallet]);
+                    // Close the creator
+                    setShowWalletCreator(false);
                   }}
                 />
               </div>

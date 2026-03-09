@@ -1,4 +1,281 @@
     Blocking waiting for file lock on package cache
     Blocking waiting for file lock on package cache
     Blocking waiting for file lock on package cache
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 2.03s
+   0.726194000s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `version_check` is newer than we are 13417514826.922891400s > 13417514824.624199600s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\generic-array-0.14.7"
+   0.728532500s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `typenum` is newer than we are 13417514826.857260100s > 13417514826.113539300s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\generic-array-0.14.7"
+   0.731170800s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 13417514824.837626700s > 13417514824.810308300s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\proc-macro2-1.0.103"
+   0.731885700s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `unicode_ident` is newer than we are 13417514826.908375900s > 13417514826.326389600s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\proc-macro2-1.0.103"
+   0.732397000s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 13417514825.055554300s > 13417514825.032185900s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\quote-1.0.42"
+   0.732651900s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `unicode_ident` is newer than we are 13417514826.908375900s > 13417514826.833276300s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\syn-2.0.111"
+   0.732838400s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `rand_core` is newer than we are 13417514826.387114200s > 13417514826.012938900s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\curve25519-dalek-3.2.0"
+   0.733158300s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `signature` is newer than we are 13417514826.634385100s > 13417514826.042087000s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\ed25519-1.5.3"
+   0.733569800s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 13417514825.687216000s > 13417514825.659983300s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\zerocopy-0.8.31"
+   0.733841400s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `rand_core` is newer than we are 13417514826.387114200s > 13417514826.380507800s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\rand_chacha-0.2.2"
+   0.734615900s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 13417514825.309560800s > 13417514825.285907500s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde_core-1.0.228"
+   0.735850700s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `semver` is newer than we are 13417514826.429886800s > 13417514826.406499100s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\rustc_version-0.4.1"
+   0.736850500s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `litrs` is newer than we are 13417514826.252138100s > 13417514825.902491400s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\document-features-0.2.12"
+   0.739160700s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `scopeguard` is newer than we are 13417514826.414846700s > 13417514826.274111800s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\lock_api-0.4.14"
+   0.740071000s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `hex` is newer than we are 13417514826.150473100s > 13417514826.070552200s "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\frost-main\\frost-core"
+   0.740163000s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `hex` is newer than we are 13417514826.150473100s > 13417514826.076637500s "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\frost-main\\frost-rerandomized"
+   0.740335800s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `typenum` is newer than we are 13417514826.857260100s > 13417514826.007850300s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\crypto-common-0.1.7"
+   0.743227400s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\wasm\\target\\debug\\build\\rustversion-6035a72bec109546\\out\\version.expr"
+   0.743281200s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\wasm\\target\\debug\\.fingerprint\\rustversion-d19e4ffaf8a4cdbd\\dep-lib-rustversion"
+   0.743294000s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13417514824, nanos: 148135900 } < FileTime { seconds: 13417514825, nanos: 185744700 }
+   0.745252200s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: dependency on `build_script_build` is newer than we are 13417514825.612106800s > 13417514825.582677500s "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\wasm-bindgen-shared-0.2.106"
+   0.748022700s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: fingerprint error for ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ed25519_tss_wasm", ["cdylib"], "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\wasm\\src\\lib.rs", Edition2021) }
+   0.748110100s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\abhis\projects\stellar-mpc-tss-next\wasm\target\debug\.fingerprint\ed25519_tss_wasm-0b4576cacb938c94\lib-ed25519_tss_wasm`
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+   0.769617100s  INFO prepare_target{force=false package_id=curve25519-dalek v3.2.0 target="curve25519_dalek"}: cargo::core::compiler::fingerprint: fingerprint dirty for curve25519-dalek v3.2.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("curve25519_dalek", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\curve25519-dalek-3.2.0\\src\\lib.rs", Edition2015) }
+   0.769655900s  INFO prepare_target{force=false package_id=curve25519-dalek v3.2.0 target="curve25519_dalek"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "rand_core", dep_mtime: FileTime { seconds: 13417514826, nanos: 387114200 }, max_mtime: FileTime { seconds: 13417514826, nanos: 12938900 } })
+   0.771654000s  INFO prepare_target{force=false package_id=digest v0.9.0 target="digest"}: cargo::core::compiler::fingerprint: fingerprint dirty for digest v0.9.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("digest", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\digest-0.9.0\\src\\lib.rs", Edition2018) }
+   0.771689500s  INFO prepare_target{force=false package_id=digest v0.9.0 target="digest"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "generic_array" })
+   0.773386500s  INFO prepare_target{force=false package_id=generic-array v0.14.7 target="generic_array"}: cargo::core::compiler::fingerprint: fingerprint dirty for generic-array v0.14.7/Check { test: false }/TargetInner { ..: lib_target("generic_array", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\generic-array-0.14.7\\src\\lib.rs", Edition2015) }
+   0.773460300s  INFO prepare_target{force=false package_id=generic-array v0.14.7 target="generic_array"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "typenum", dep_mtime: FileTime { seconds: 13417514826, nanos: 857260100 }, max_mtime: FileTime { seconds: 13417514826, nanos: 113539300 } })
+   0.778614600s  INFO prepare_target{force=false package_id=generic-array v0.14.7 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for generic-array v0.14.7/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\generic-array-0.14.7\\build.rs", Edition2015) }
+   0.778672000s  INFO prepare_target{force=false package_id=generic-array v0.14.7 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   0.780172100s  INFO prepare_target{force=false package_id=generic-array v0.14.7 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for generic-array v0.14.7/Build/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\generic-array-0.14.7\\build.rs", Edition2015) }
+   0.780257600s  INFO prepare_target{force=false package_id=generic-array v0.14.7 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "version_check", dep_mtime: FileTime { seconds: 13417514826, nanos: 922891400 }, max_mtime: FileTime { seconds: 13417514824, nanos: 624199600 } })
+   0.786803300s  INFO prepare_target{force=false package_id=zeroize v1.8.2 target="zeroize"}: cargo::core::compiler::fingerprint: fingerprint dirty for zeroize v1.8.2/Check { test: false }/TargetInner { ..: lib_target("zeroize", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\zeroize-1.8.2\\src\\lib.rs", Edition2021) }
+   0.786844600s  INFO prepare_target{force=false package_id=zeroize v1.8.2 target="zeroize"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "zeroize_derive" })
+   0.788424600s  INFO prepare_target{force=false package_id=zeroize_derive v1.4.2 target="zeroize_derive"}: cargo::core::compiler::fingerprint: fingerprint dirty for zeroize_derive v1.4.2/Build/TargetInner { name_inferred: true, for_host: true, proc_macro: true, ..: lib_target("zeroize_derive", ["proc-macro"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\zeroize_derive-1.4.2\\src\\lib.rs", Edition2021) }
+   0.788471400s  INFO prepare_target{force=false package_id=zeroize_derive v1.4.2 target="zeroize_derive"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "syn" })
+   0.789831900s  INFO prepare_target{force=false package_id=proc-macro2 v1.0.103 target="proc_macro2"}: cargo::core::compiler::fingerprint: fingerprint dirty for proc-macro2 v1.0.103/Build/TargetInner { ..: lib_target("proc_macro2", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\proc-macro2-1.0.103\\src\\lib.rs", Edition2021) }
+   0.789872400s  INFO prepare_target{force=false package_id=proc-macro2 v1.0.103 target="proc_macro2"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "unicode_ident", dep_mtime: FileTime { seconds: 13417514826, nanos: 908375900 }, max_mtime: FileTime { seconds: 13417514826, nanos: 326389600 } })
+   0.795085500s  INFO prepare_target{force=false package_id=proc-macro2 v1.0.103 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for proc-macro2 v1.0.103/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\proc-macro2-1.0.103\\build.rs", Edition2021) }
+   0.795165700s  INFO prepare_target{force=false package_id=proc-macro2 v1.0.103 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "build_script_build", dep_mtime: FileTime { seconds: 13417514824, nanos: 837626700 }, max_mtime: FileTime { seconds: 13417514824, nanos: 810308300 } })
+   0.798063600s  INFO prepare_target{force=false package_id=quote v1.0.42 target="quote"}: cargo::core::compiler::fingerprint: fingerprint dirty for quote v1.0.42/Build/TargetInner { ..: lib_target("quote", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\quote-1.0.42\\src\\lib.rs", Edition2018) }
+   0.798100700s  INFO prepare_target{force=false package_id=quote v1.0.42 target="quote"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   0.801749700s  INFO prepare_target{force=false package_id=quote v1.0.42 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for quote v1.0.42/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\quote-1.0.42\\build.rs", Edition2018) }
+   0.801788700s  INFO prepare_target{force=false package_id=quote v1.0.42 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "build_script_build", dep_mtime: FileTime { seconds: 13417514825, nanos: 55554300 }, max_mtime: FileTime { seconds: 13417514825, nanos: 32185900 } })
+   0.803001800s  INFO prepare_target{force=false package_id=syn v2.0.111 target="syn"}: cargo::core::compiler::fingerprint: fingerprint dirty for syn v2.0.111/Build/TargetInner { ..: lib_target("syn", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\syn-2.0.111\\src\\lib.rs", Edition2021) }
+   0.803036600s  INFO prepare_target{force=false package_id=syn v2.0.111 target="syn"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "unicode_ident", dep_mtime: FileTime { seconds: 13417514826, nanos: 908375900 }, max_mtime: FileTime { seconds: 13417514826, nanos: 833276300 } })
+   0.804527200s  INFO prepare_target{force=false package_id=ed25519-dalek v1.0.1 target="ed25519_dalek"}: cargo::core::compiler::fingerprint: fingerprint dirty for ed25519-dalek v1.0.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ed25519_dalek", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\ed25519-dalek-1.0.1\\src\\lib.rs", Edition2018) }
+   0.804565500s  INFO prepare_target{force=false package_id=ed25519-dalek v1.0.1 target="ed25519_dalek"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "rand" })
+   0.805844600s  INFO prepare_target{force=false package_id=ed25519 v1.5.3 target="ed25519"}: cargo::core::compiler::fingerprint: fingerprint dirty for ed25519 v1.5.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("ed25519", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\ed25519-1.5.3\\src\\lib.rs", Edition2021) }
+   0.805885200s  INFO prepare_target{force=false package_id=ed25519 v1.5.3 target="ed25519"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "signature", dep_mtime: FileTime { seconds: 13417514826, nanos: 634385100 }, max_mtime: FileTime { seconds: 13417514826, nanos: 42087000 } })
+   0.807328700s  INFO prepare_target{force=false package_id=rand v0.7.3 target="rand"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand v0.7.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\rand-0.7.3\\src\\lib.rs", Edition2018) }
+   0.807370900s  INFO prepare_target{force=false package_id=rand v0.7.3 target="rand"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "rand_chacha" })
+   0.810030300s  INFO prepare_target{force=false package_id=rand_chacha v0.2.2 target="rand_chacha"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand_chacha v0.2.2/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand_chacha", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\rand_chacha-0.2.2\\src\\lib.rs", Edition2018) }
+   0.810104400s  INFO prepare_target{force=false package_id=rand_chacha v0.2.2 target="rand_chacha"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "rand_core", dep_mtime: FileTime { seconds: 13417514826, nanos: 387114200 }, max_mtime: FileTime { seconds: 13417514826, nanos: 380507800 } })
+   0.812537700s  INFO prepare_target{force=false package_id=ppv-lite86 v0.2.21 target="ppv_lite86"}: cargo::core::compiler::fingerprint: fingerprint dirty for ppv-lite86 v0.2.21/Check { test: false }/TargetInner { ..: lib_target("ppv_lite86", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\ppv-lite86-0.2.21\\src\\lib.rs", Edition2021) }
+   0.812577800s  INFO prepare_target{force=false package_id=ppv-lite86 v0.2.21 target="ppv_lite86"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "zerocopy" })
+   0.813739300s  INFO prepare_target{force=false package_id=zerocopy v0.8.31 target="zerocopy"}: cargo::core::compiler::fingerprint: fingerprint dirty for zerocopy v0.8.31/Check { test: false }/TargetInner { ..: lib_target("zerocopy", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\zerocopy-0.8.31\\src\\lib.rs", Edition2021) }
+   0.813773700s  INFO prepare_target{force=false package_id=zerocopy v0.8.31 target="zerocopy"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   0.816012900s  INFO prepare_target{force=false package_id=zerocopy v0.8.31 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for zerocopy v0.8.31/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\zerocopy-0.8.31\\build.rs", Edition2021) }
+   0.816051800s  INFO prepare_target{force=false package_id=zerocopy v0.8.31 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "build_script_build", dep_mtime: FileTime { seconds: 13417514825, nanos: 687216000 }, max_mtime: FileTime { seconds: 13417514825, nanos: 659983300 } })
+   0.817477900s  INFO prepare_target{force=false package_id=serde v1.0.228 target="serde"}: cargo::core::compiler::fingerprint: fingerprint dirty for serde v1.0.228/Check { test: false }/TargetInner { ..: lib_target("serde", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde-1.0.228\\src\\lib.rs", Edition2021) }
+   0.817513600s  INFO prepare_target{force=false package_id=serde v1.0.228 target="serde"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "serde_derive" })
+   0.820156800s  INFO prepare_target{force=false package_id=serde_core v1.0.228 target="serde_core"}: cargo::core::compiler::fingerprint: fingerprint dirty for serde_core v1.0.228/Check { test: false }/TargetInner { ..: lib_target("serde_core", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde_core-1.0.228\\src\\lib.rs", Edition2021) }
+   0.820190800s  INFO prepare_target{force=false package_id=serde_core v1.0.228 target="serde_core"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   0.822155300s  INFO prepare_target{force=false package_id=serde_core v1.0.228 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for serde_core v1.0.228/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde_core-1.0.228\\build.rs", Edition2021) }
+   0.822188300s  INFO prepare_target{force=false package_id=serde_core v1.0.228 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "build_script_build", dep_mtime: FileTime { seconds: 13417514825, nanos: 309560800 }, max_mtime: FileTime { seconds: 13417514825, nanos: 285907500 } })
+   0.823244600s  INFO prepare_target{force=false package_id=serde_derive v1.0.228 target="serde_derive"}: cargo::core::compiler::fingerprint: fingerprint dirty for serde_derive v1.0.228/Build/TargetInner { for_host: true, proc_macro: true, ..: lib_target("serde_derive", ["proc-macro"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serde_derive-1.0.228\\src\\lib.rs", Edition2021) }
+   0.823276600s  INFO prepare_target{force=false package_id=serde_derive v1.0.228 target="serde_derive"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "syn" })
+   0.824346600s  INFO prepare_target{force=false package_id=sha2 v0.9.9 target="sha2"}: cargo::core::compiler::fingerprint: fingerprint dirty for sha2 v0.9.9/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("sha2", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\sha2-0.9.9\\src\\lib.rs", Edition2018) }
+   0.824378100s  INFO prepare_target{force=false package_id=sha2 v0.9.9 target="sha2"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "digest" })
+   0.826603300s  INFO prepare_target{force=false package_id=block-buffer v0.9.0 target="block_buffer"}: cargo::core::compiler::fingerprint: fingerprint dirty for block-buffer v0.9.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("block_buffer", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\block-buffer-0.9.0\\src\\lib.rs", Edition2018) }
+   0.826672600s  INFO prepare_target{force=false package_id=block-buffer v0.9.0 target="block_buffer"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "generic_array" })
+   0.829793100s  INFO prepare_target{force=false package_id=frost-ed25519 v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-ed25519) target="frost_ed25519"}: cargo::core::compiler::fingerprint: fingerprint dirty for frost-ed25519 v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-ed25519)/Check { test: false }/TargetInner { name_inferred: true, benched: false, ..: lib_target("frost_ed25519", ["lib"], "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\frost-main\\frost-ed25519\\src\\lib.rs", Edition2021) }
+   0.829844100s  INFO prepare_target{force=false package_id=frost-ed25519 v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-ed25519) target="frost_ed25519"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "document_features" })
+   0.831193200s  INFO prepare_target{force=false package_id=curve25519-dalek v4.1.3 target="curve25519_dalek"}: cargo::core::compiler::fingerprint: fingerprint dirty for curve25519-dalek v4.1.3/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("curve25519_dalek", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\curve25519-dalek-4.1.3\\src\\lib.rs", Edition2021) }
+   0.831235100s  INFO prepare_target{force=false package_id=curve25519-dalek v4.1.3 target="curve25519_dalek"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "curve25519_dalek_derive" })
+   0.833580100s  INFO prepare_target{force=false package_id=curve25519-dalek v4.1.3 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for curve25519-dalek v4.1.3/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\curve25519-dalek-4.1.3\\build.rs", Edition2021) }
+   0.833615600s  INFO prepare_target{force=false package_id=curve25519-dalek v4.1.3 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   0.834324900s  INFO prepare_target{force=false package_id=curve25519-dalek v4.1.3 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for curve25519-dalek v4.1.3/Build/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\curve25519-dalek-4.1.3\\build.rs", Edition2021) }
+   0.834352200s  INFO prepare_target{force=false package_id=curve25519-dalek v4.1.3 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "rustc_version" })
+   0.835315200s  INFO prepare_target{force=false package_id=rustc_version v0.4.1 target="rustc_version"}: cargo::core::compiler::fingerprint: fingerprint dirty for rustc_version v0.4.1/Build/TargetInner { ..: lib_target("rustc_version", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\rustc_version-0.4.1\\src\\lib.rs", Edition2018) }
+   0.835398000s  INFO prepare_target{force=false package_id=rustc_version v0.4.1 target="rustc_version"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "semver", dep_mtime: FileTime { seconds: 13417514826, nanos: 429886800 }, max_mtime: FileTime { seconds: 13417514826, nanos: 406499100 } })
+   0.836578700s  INFO prepare_target{force=false package_id=curve25519-dalek-derive v0.1.1 target="curve25519_dalek_derive"}: cargo::core::compiler::fingerprint: fingerprint dirty for curve25519-dalek-derive v0.1.1/Build/TargetInner { name_inferred: true, for_host: true, proc_macro: true, ..: lib_target("curve25519_dalek_derive", ["proc-macro"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\curve25519-dalek-derive-0.1.1\\src\\lib.rs", Edition2021) }
+   0.836613500s  INFO prepare_target{force=false package_id=curve25519-dalek-derive v0.1.1 target="curve25519_dalek_derive"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "syn" })
+   0.840043500s  INFO prepare_target{force=false package_id=document-features v0.2.12 target="document_features"}: cargo::core::compiler::fingerprint: fingerprint dirty for document-features v0.2.12/Build/TargetInner { for_host: true, proc_macro: true, ..: lib_target("document_features", ["proc-macro"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\document-features-0.2.12\\lib.rs", Edition2018) }
+   0.840123700s  INFO prepare_target{force=false package_id=document-features v0.2.12 target="document_features"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "litrs", dep_mtime: FileTime { seconds: 13417514826, nanos: 252138100 }, max_mtime: FileTime { seconds: 13417514825, nanos: 902491400 } })
+   0.887465800s  INFO prepare_target{force=false package_id=frost-core v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-core) target="frost_core"}: cargo::core::compiler::fingerprint: fingerprint dirty for frost-core v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-core)/Check { test: false }/TargetInner { name_inferred: true, benched: false, ..: lib_target("frost_core", ["lib"], "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\frost-main\\frost-core\\src\\lib.rs", Edition2021) }
+   0.887530000s  INFO prepare_target{force=false package_id=frost-core v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-core) target="frost_core"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "hex", dep_mtime: FileTime { seconds: 13417514826, nanos: 150473100 }, max_mtime: FileTime { seconds: 13417514826, nanos: 70552200 } })
+   0.921640900s  INFO prepare_target{force=false package_id=derive-getters v0.5.0 target="derive_getters"}: cargo::core::compiler::fingerprint: fingerprint dirty for derive-getters v0.5.0/Build/TargetInner { for_host: true, proc_macro: true, ..: lib_target("derive_getters", ["proc-macro"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\derive-getters-0.5.0\\src\\lib.rs", Edition2021) }
+   0.921743100s  INFO prepare_target{force=false package_id=derive-getters v0.5.0 target="derive_getters"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "syn" })
+   0.981451800s  INFO prepare_target{force=false package_id=postcard v1.1.3 target="postcard"}: cargo::core::compiler::fingerprint: fingerprint dirty for postcard v1.1.3/Check { test: false }/TargetInner { ..: lib_target("postcard", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\postcard-1.1.3\\src\\lib.rs", Edition2021) }
+   0.981488300s  INFO prepare_target{force=false package_id=postcard v1.1.3 target="postcard"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "heapless" })
+   1.011870300s  INFO prepare_target{force=false package_id=cobs v0.3.0 target="cobs"}: cargo::core::compiler::fingerprint: fingerprint dirty for cobs v0.3.0/Check { test: false }/TargetInner { ..: lib_target("cobs", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\cobs-0.3.0\\src\\lib.rs", Edition2021) }
+   1.011939000s  INFO prepare_target{force=false package_id=cobs v0.3.0 target="cobs"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "thiserror" })
+   1.029421800s  INFO prepare_target{force=false package_id=thiserror v2.0.18 target="thiserror"}: cargo::core::compiler::fingerprint: fingerprint dirty for thiserror v2.0.18/Check { test: false }/TargetInner { ..: lib_target("thiserror", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\thiserror-2.0.18\\src\\lib.rs", Edition2021) }
+   1.029493900s  INFO prepare_target{force=false package_id=thiserror v2.0.18 target="thiserror"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "thiserror_impl" })
+   1.080128300s  INFO prepare_target{force=false package_id=thiserror-impl v2.0.18 target="thiserror_impl"}: cargo::core::compiler::fingerprint: fingerprint dirty for thiserror-impl v2.0.18/Build/TargetInner { for_host: true, proc_macro: true, ..: lib_target("thiserror_impl", ["proc-macro"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\thiserror-impl-2.0.18\\src\\lib.rs", Edition2021) }
+   1.080214100s  INFO prepare_target{force=false package_id=thiserror-impl v2.0.18 target="thiserror_impl"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "syn" })
+   1.122215800s  INFO prepare_target{force=false package_id=heapless v0.7.17 target="heapless"}: cargo::core::compiler::fingerprint: fingerprint dirty for heapless v0.7.17/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("heapless", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\heapless-0.7.17\\src\\lib.rs", Edition2018) }
+   1.122290100s  INFO prepare_target{force=false package_id=heapless v0.7.17 target="heapless"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "spin" })
+   1.174627500s  INFO prepare_target{force=false package_id=heapless v0.7.17 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for heapless v0.7.17/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\heapless-0.7.17\\build.rs", Edition2018) }
+   1.174711000s  INFO prepare_target{force=false package_id=heapless v0.7.17 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   1.253228600s  INFO prepare_target{force=false package_id=heapless v0.7.17 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for heapless v0.7.17/Build/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\heapless-0.7.17\\build.rs", Edition2018) }
+   1.256044100s  INFO prepare_target{force=false package_id=heapless v0.7.17 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "rustc_version" })
+   1.332762000s  INFO prepare_target{force=false package_id=spin v0.9.8 target="spin"}: cargo::core::compiler::fingerprint: fingerprint dirty for spin v0.9.8/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("spin", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\spin-0.9.8\\src\\lib.rs", Edition2015) }
+   1.332869400s  INFO prepare_target{force=false package_id=spin v0.9.8 target="spin"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "lock_api_crate" })
+   1.401424800s  INFO prepare_target{force=false package_id=lock_api v0.4.14 target="lock_api"}: cargo::core::compiler::fingerprint: fingerprint dirty for lock_api v0.4.14/Check { test: false }/TargetInner { ..: lib_target("lock_api", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\lock_api-0.4.14\\src\\lib.rs", Edition2021) }
+   1.401514500s  INFO prepare_target{force=false package_id=lock_api v0.4.14 target="lock_api"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "scopeguard", dep_mtime: FileTime { seconds: 13417514826, nanos: 414846700 }, max_mtime: FileTime { seconds: 13417514826, nanos: 274111800 } })
+   1.672888300s  INFO prepare_target{force=false package_id=serdect v0.2.0 target="serdect"}: cargo::core::compiler::fingerprint: fingerprint dirty for serdect v0.2.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("serdect", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\serdect-0.2.0\\src\\lib.rs", Edition2021) }
+   1.672976800s  INFO prepare_target{force=false package_id=serdect v0.2.0 target="serdect"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "serde" })
+   1.812348900s  INFO prepare_target{force=false package_id=visibility v0.1.1 target="visibility"}: cargo::core::compiler::fingerprint: fingerprint dirty for visibility v0.1.1/Build/TargetInner { for_host: true, proc_macro: true, ..: lib_target("visibility", ["proc-macro"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\visibility-0.1.1\\src\\lib.rs", Edition2021) }
+   1.812423200s  INFO prepare_target{force=false package_id=visibility v0.1.1 target="visibility"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "syn" })
+   1.903117600s  INFO prepare_target{force=false package_id=frost-rerandomized v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-rerandomized) target="frost_rerandomized"}: cargo::core::compiler::fingerprint: fingerprint dirty for frost-rerandomized v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-rerandomized)/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("frost_rerandomized", ["lib"], "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\frost-main\\frost-rerandomized\\src\\lib.rs", Edition2021) }
+   1.903206200s  INFO prepare_target{force=false package_id=frost-rerandomized v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-rerandomized) target="frost_rerandomized"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "hex", dep_mtime: FileTime { seconds: 13417514826, nanos: 150473100 }, max_mtime: FileTime { seconds: 13417514826, nanos: 76637500 } })
+   2.083531600s  INFO prepare_target{force=false package_id=sha2 v0.10.9 target="sha2"}: cargo::core::compiler::fingerprint: fingerprint dirty for sha2 v0.10.9/Check { test: false }/TargetInner { ..: lib_target("sha2", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\sha2-0.10.9\\src\\lib.rs", Edition2018) }
+   2.083651600s  INFO prepare_target{force=false package_id=sha2 v0.10.9 target="sha2"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "digest" })
+   2.165945200s  INFO prepare_target{force=false package_id=digest v0.10.7 target="digest"}: cargo::core::compiler::fingerprint: fingerprint dirty for digest v0.10.7/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("digest", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\digest-0.10.7\\src\\lib.rs", Edition2018) }
+   2.166023300s  INFO prepare_target{force=false package_id=digest v0.10.7 target="digest"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "crypto_common" })
+   2.200893900s  INFO prepare_target{force=false package_id=block-buffer v0.10.4 target="block_buffer"}: cargo::core::compiler::fingerprint: fingerprint dirty for block-buffer v0.10.4/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("block_buffer", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\block-buffer-0.10.4\\src\\lib.rs", Edition2018) }
+   2.200975300s  INFO prepare_target{force=false package_id=block-buffer v0.10.4 target="block_buffer"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "generic_array" })
+   2.233464100s  INFO prepare_target{force=false package_id=crypto-common v0.1.7 target="crypto_common"}: cargo::core::compiler::fingerprint: fingerprint dirty for crypto-common v0.1.7/Check { test: false }/TargetInner { ..: lib_target("crypto_common", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\crypto-common-0.1.7\\src\\lib.rs", Edition2018) }
+   2.233544800s  INFO prepare_target{force=false package_id=crypto-common v0.1.7 target="crypto_common"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "typenum", dep_mtime: FileTime { seconds: 13417514826, nanos: 857260100 }, max_mtime: FileTime { seconds: 13417514826, nanos: 7850300 } })
+   2.236034500s  INFO prepare_target{force=false package_id=lazy_static v1.5.0 target="lazy_static"}: cargo::core::compiler::fingerprint: fingerprint error for lazy_static v1.5.0/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("lazy_static", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\lazy_static-1.5.0\\src\\lib.rs", Edition2015) }
+   2.236121100s  INFO prepare_target{force=false package_id=lazy_static v1.5.0 target="lazy_static"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\abhis\projects\stellar-mpc-tss-next\wasm\target\debug\.fingerprint\lazy_static-378acb3de583424f\lib-lazy_static`
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_filter_source_repo
+  12: git_libgit2_prerelease
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: <unknown>
+  17: git_midx_writer_dump
+  18: git_filter_source_repo
+  19: git_midx_writer_dump
+  20: BaseThreadInitThunk
+  21: RtlUserThreadStart
+   2.271242700s  INFO prepare_target{force=false package_id=rand v0.8.5 target="rand"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand v0.8.5/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\rand-0.8.5\\src\\lib.rs", Edition2018) }
+   2.271331500s  INFO prepare_target{force=false package_id=rand v0.8.5 target="rand"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "rand_chacha" })
+   2.316600300s  INFO prepare_target{force=false package_id=rand_chacha v0.3.1 target="rand_chacha"}: cargo::core::compiler::fingerprint: fingerprint dirty for rand_chacha v0.3.1/Check { test: false }/TargetInner { name_inferred: true, ..: lib_target("rand_chacha", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\rand_chacha-0.3.1\\src\\lib.rs", Edition2018) }
+   2.316678300s  INFO prepare_target{force=false package_id=rand_chacha v0.3.1 target="rand_chacha"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "ppv_lite86" })
+   2.338031400s  INFO prepare_target{force=false package_id=wasm-bindgen v0.2.106 target="wasm_bindgen"}: cargo::core::compiler::fingerprint: fingerprint dirty for wasm-bindgen v0.2.106/Check { test: false }/TargetInner { tested: false, ..: lib_target("wasm_bindgen", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\wasm-bindgen-0.2.106\\src\\lib.rs", Edition2021) }
+   2.338111000s  INFO prepare_target{force=false package_id=wasm-bindgen v0.2.106 target="wasm_bindgen"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "wasm_bindgen_macro" })
+   2.374750700s  INFO prepare_target{force=false package_id=wasm-bindgen v0.2.106 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for wasm-bindgen v0.2.106/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\wasm-bindgen-0.2.106\\build.rs", Edition2021) }
+   2.374835600s  INFO prepare_target{force=false package_id=wasm-bindgen v0.2.106 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   2.407096800s  INFO prepare_target{force=false package_id=wasm-bindgen v0.2.106 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for wasm-bindgen v0.2.106/Build/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\wasm-bindgen-0.2.106\\build.rs", Edition2021) }
+   2.407184300s  INFO prepare_target{force=false package_id=wasm-bindgen v0.2.106 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "rustversion_compat" })
+   2.444420300s  INFO prepare_target{force=false package_id=rustversion v1.0.22 target="rustversion"}: cargo::core::compiler::fingerprint: fingerprint dirty for rustversion v1.0.22/Build/TargetInner { for_host: true, proc_macro: true, ..: lib_target("rustversion", ["proc-macro"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\rustversion-1.0.22\\src\\lib.rs", Edition2018) }
+   2.444528500s  INFO prepare_target{force=false package_id=rustversion v1.0.22 target="rustversion"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\wasm\\target\\debug\\.fingerprint\\rustversion-d19e4ffaf8a4cdbd\\dep-lib-rustversion", reference_mtime: FileTime { seconds: 13417514824, nanos: 148135900 }, stale: "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\wasm\\target\\debug\\build\\rustversion-6035a72bec109546\\out\\version.expr", stale_mtime: FileTime { seconds: 13417514825, nanos: 185744700 } }))
+   2.700822100s  INFO prepare_target{force=false package_id=wasm-bindgen-shared v0.2.106 target="build-script-build"}: cargo::core::compiler::fingerprint: fingerprint dirty for wasm-bindgen-shared v0.2.106/RunCustomBuild/TargetInner { ..: custom_build_target("build-script-build", "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\wasm-bindgen-shared-0.2.106\\build.rs", Edition2021) }
+   2.702032100s  INFO prepare_target{force=false package_id=wasm-bindgen-shared v0.2.106 target="build-script-build"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDependency { name: "build_script_build", dep_mtime: FileTime { seconds: 13417514825, nanos: 612106800 }, max_mtime: FileTime { seconds: 13417514825, nanos: 582677500 } })
+   2.723023900s  INFO prepare_target{force=false package_id=wasm-bindgen-macro v0.2.106 target="wasm_bindgen_macro"}: cargo::core::compiler::fingerprint: fingerprint dirty for wasm-bindgen-macro v0.2.106/Build/TargetInner { for_host: true, proc_macro: true, ..: lib_target("wasm_bindgen_macro", ["proc-macro"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\wasm-bindgen-macro-0.2.106\\src\\lib.rs", Edition2021) }
+   2.723097700s  INFO prepare_target{force=false package_id=wasm-bindgen-macro v0.2.106 target="wasm_bindgen_macro"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "quote" })
+   2.751429200s  INFO prepare_target{force=false package_id=wasm-bindgen-macro-support v0.2.106 target="wasm_bindgen_macro_support"}: cargo::core::compiler::fingerprint: fingerprint dirty for wasm-bindgen-macro-support v0.2.106/Build/TargetInner { ..: lib_target("wasm_bindgen_macro_support", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\wasm-bindgen-macro-support-0.2.106\\src\\lib.rs", Edition2021) }
+   2.751520200s  INFO prepare_target{force=false package_id=wasm-bindgen-macro-support v0.2.106 target="wasm_bindgen_macro_support"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "syn" })
+   2.797941100s  INFO prepare_target{force=false package_id=wasm-bindgen-shared v0.2.106 target="wasm_bindgen_shared"}: cargo::core::compiler::fingerprint: fingerprint dirty for wasm-bindgen-shared v0.2.106/Build/TargetInner { ..: lib_target("wasm_bindgen_shared", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\wasm-bindgen-shared-0.2.106\\src\\lib.rs", Edition2021) }
+   2.798017500s  INFO prepare_target{force=false package_id=wasm-bindgen-shared v0.2.106 target="wasm_bindgen_shared"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   2.834088300s  INFO prepare_target{force=false package_id=wasm-bindgen-shared v0.2.106 target="wasm_bindgen_shared"}: cargo::core::compiler::fingerprint: fingerprint dirty for wasm-bindgen-shared v0.2.106/Check { test: false }/TargetInner { ..: lib_target("wasm_bindgen_shared", ["lib"], "C:\\Users\\abhis\\.cargo\\registry\\src\\index.crates.io-1949cf8c6b5b557f\\wasm-bindgen-shared-0.2.106\\src\\lib.rs", Edition2021) }
+   2.834190300s  INFO prepare_target{force=false package_id=wasm-bindgen-shared v0.2.106 target="wasm_bindgen_shared"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleDepFingerprint { name: "build_script_build" })
+   2.853505100s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint: fingerprint error for ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm)/Check { test: true }/TargetInner { name_inferred: true, ..: lib_target("ed25519_tss_wasm", ["cdylib"], "C:\\Users\\abhis\\projects\\stellar-mpc-tss-next\\wasm\\src\\lib.rs", Edition2021) }
+   2.853583100s  INFO prepare_target{force=false package_id=ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm) target="ed25519_tss_wasm"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\abhis\projects\stellar-mpc-tss-next\wasm\target\debug\.fingerprint\ed25519_tss_wasm-4457d6eb775d87ad\test-lib-ed25519_tss_wasm`
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+   Compiling proc-macro2 v1.0.103
+   Compiling quote v1.0.42
+   Compiling generic-array v0.14.7
+   Compiling rustc_version v0.4.1
+   Compiling serde_core v1.0.228
+   Compiling zerocopy v0.8.31
+   Compiling wasm-bindgen-shared v0.2.106
+    Checking lock_api v0.4.14
+   Compiling document-features v0.2.12
+   Compiling rustversion v1.0.22
+    Checking ed25519 v1.5.3
+    Checking lazy_static v1.5.0
+   Compiling heapless v0.7.17
+   Compiling curve25519-dalek v4.1.3
+    Checking spin v0.9.8
+   Compiling wasm-bindgen v0.2.106
+   Compiling syn v2.0.111
+    Checking block-buffer v0.10.4
+    Checking digest v0.9.0
+    Checking crypto-common v0.1.7
+    Checking block-buffer v0.9.0
+    Checking sha2 v0.9.9
+    Checking ppv-lite86 v0.2.21
+    Checking digest v0.10.7
+    Checking sha2 v0.10.9
+    Checking rand_chacha v0.2.2
+    Checking rand_chacha v0.3.1
+    Checking rand v0.7.3
+    Checking rand v0.8.5
+   Compiling wasm-bindgen-macro-support v0.2.106
+   Compiling serde_derive v1.0.228
+   Compiling zeroize_derive v1.4.2
+   Compiling thiserror-impl v2.0.18
+   Compiling derive-getters v0.5.0
+   Compiling visibility v0.1.1
+   Compiling curve25519-dalek-derive v0.1.1
+    Checking zeroize v1.8.2
+    Checking thiserror v2.0.18
+    Checking curve25519-dalek v3.2.0
+    Checking cobs v0.3.0
+   Compiling wasm-bindgen-macro v0.2.106
+    Checking serde v1.0.228
+    Checking serdect v0.2.0
+    Checking ed25519-dalek v1.0.1
+    Checking postcard v1.1.3
+    Checking frost-core v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-core)
+    Checking frost-rerandomized v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-rerandomized)
+    Checking frost-ed25519 v2.2.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\frost-main\frost-ed25519)
+    Checking ed25519_tss_wasm v0.1.0 (C:\Users\abhis\projects\stellar-mpc-tss-next\wasm)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1m 16s

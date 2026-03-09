@@ -12,37 +12,6 @@ export default function Home() {
   const [selectedWallet, setSelectedWallet] = useState<any>(null);
   const [debugInfo, setDebugInfo] = useState<any>(null);
 
-  // Auto-create wallet on page load
-  useEffect(() => {
-    const autoCreateWallet = async () => {
-      try {
-        console.log('=== AUTO-CREATING WALLET ===');
-        const walletInstance = new StellarTSSWallet('testnet');
-        
-        const wallet = await walletInstance.createWallet(['alice', 'bob', 'charlie'], 2, 'testnet');
-        console.log('✅ Wallet created:', wallet);
-        
-        setDebugInfo({
-          status: 'success',
-          wallet: wallet,
-          message: 'Wallet auto-created successfully!'
-        });
-        
-        setSelectedWallet(wallet);
-        
-      } catch (error) {
-        console.error('❌ Auto-create failed:', error);
-        setDebugInfo({
-          status: 'error',
-          error: error,
-          message: 'Auto-create failed: ' + (error as any).message
-        });
-      }
-    };
-
-    autoCreateWallet();
-  }, []);
-
   return (
     <div className="min-h-screen">
       {/* Header with gradient border */}

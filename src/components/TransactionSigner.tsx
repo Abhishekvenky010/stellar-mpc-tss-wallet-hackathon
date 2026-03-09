@@ -71,11 +71,11 @@ export default function TransactionSigner({ wallet, onTransactionSigned }: Trans
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30';
-      case 'collecting': return 'bg-blue-500/20 text-blue-400 border border-blue-500/30';
-      case 'signed': return 'bg-green-500/20 text-green-400 border border-green-500/30';
-      case 'submitted': return 'bg-purple-500/20 text-purple-400 border border-purple-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border border-gray-500/30';
+      case 'pending': return 'bg-yellow-500/20 text-yellow-700 border border-yellow-500/30';
+      case 'collecting': return 'bg-blue-500/20 text-blue-700 border border-blue-500/30';
+      case 'signed': return 'bg-green-500/20 text-green-700 border border-green-500/30';
+      case 'submitted': return 'bg-purple-500/20 text-purple-700 border border-purple-500/30';
+      default: return 'bg-gray-500/20 text-gray-700 border border-gray-500/30';
     }
   };
 
@@ -84,43 +84,43 @@ export default function TransactionSigner({ wallet, onTransactionSigned }: Trans
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-bold gradient-text text-glow mb-2">Sign Transactions</h2>
-          <p className="text-gray-400">Add your signature to pending TSS transactions</p>
+          <p className="text-gray-600">Add your signature to pending TSS transactions</p>
         </div>
 
         <div className="card shadow-lg rounded-xl p-8 space-y-8">
           {/* Wallet Info */}
-          <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-lg p-6 border border-white/10">
-            <h3 className="text-lg font-semibold text-white mb-4">Wallet Details</h3>
+          <div className="bg-gradient-to-br from-gray/5 to-gray/10 rounded-lg p-6 border border-gray/20">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Wallet Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-400">Public Key:</span>
-                <span className="text-gray-300 font-mono">{wallet.config.publicKey.toString().slice(0, 12)}...</span>
+                <span className="text-gray-600">Public Key:</span>
+                <span className="text-gray-700 font-mono">{wallet.config.publicKey.toString().slice(0, 12)}...</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">Threshold:</span>
-                <span className="text-white">{wallet.config.threshold}-of-{wallet.participants.length}</span>
+                <span className="text-gray-600">Threshold:</span>
+                <span className="text-gray-800">{wallet.config.threshold}-of-{wallet.participants.length}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-400">Network:</span>
-                <span className="text-white capitalize">{wallet.config.network}</span>
+                <span className="text-gray-600">Network:</span>
+                <span className="text-gray-800 capitalize">{wallet.config.network}</span>
               </div>
             </div>
           </div>
 
           {/* Signing Mode Selection */}
           <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-white mb-4">Choose Signing Method</h3>
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Choose Signing Method</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <button
                 onClick={() => setSigningMode('traditional')}
                 className={`p-4 border-2 rounded-xl text-left transition-all duration-300 ${
                   signingMode === 'traditional'
                     ? 'border-blue-500 bg-blue-500/20 glow'
-                    : 'border-white/10 hover:border-white/30 bg-white/5'
+                    : 'border-gray/20 hover:border-gray/30 bg-gray/5'
                 }`}
               >
-                <div className="font-semibold text-white text-lg">🔐 Traditional Signing</div>
-                <div className="text-sm text-gray-400 mt-1">
+                <div className="font-semibold text-gray-800 text-lg">🔐 Traditional Signing</div>
+                <div className="text-sm text-gray-600 mt-1">
                   Sign as a single participant using your key share
                 </div>
               </button>
@@ -129,11 +129,11 @@ export default function TransactionSigner({ wallet, onTransactionSigned }: Trans
                 className={`p-4 border-2 rounded-xl text-left transition-all duration-300 ${
                   signingMode === 'mpc'
                     ? 'border-purple-500 bg-purple-500/20 glow'
-                    : 'border-white/10 hover:border-white/30 bg-white/5'
+                    : 'border-gray/20 hover:border-gray/30 bg-gray/5'
                 }`}
               >
-                <div className="font-semibold text-white text-lg">🚀 MPC Simulation</div>
-                <div className="text-sm text-gray-400 mt-1">
+                <div className="font-semibold text-gray-800 text-lg">🚀 MPC Simulation</div>
+                <div className="text-sm text-gray-600 mt-1">
                   Experience real multi-party computation across browser tabs
                 </div>
               </button>
@@ -152,13 +152,13 @@ export default function TransactionSigner({ wallet, onTransactionSigned }: Trans
 
           {/* Transaction List */}
           <div>
-            <h3 className="text-xl font-semibold text-white mb-6">Pending Transactions</h3>
+            <h3 className="text-xl font-semibold text-gray-800 mb-6">Pending Transactions</h3>
             {wallet.transactions.length === 0 ? (
               <div className="text-center py-12">
                 <div className="w-20 h-20 gradient-bg rounded-full flex items-center justify-center mx-auto mb-4 glow">
                   <span className="text-4xl">📝</span>
                 </div>
-                <p className="text-gray-300 text-lg">No transactions to sign</p>
+                <p className="text-gray-600 text-lg">No transactions to sign</p>
                 <p className="text-gray-500 text-sm mt-1">Transactions will appear here when created</p>
               </div>
             ) : (
@@ -169,14 +169,14 @@ export default function TransactionSigner({ wallet, onTransactionSigned }: Trans
                     className={`border-2 rounded-xl p-6 cursor-pointer transition-all duration-300 ${
                       selectedTransaction?.id === transaction.id
                         ? 'border-blue-500 bg-blue-500/10 shadow-lg glow'
-                        : 'border-white/10 hover:border-white/30 bg-white/5 hover:bg-white/10'
+                        : 'border-gray/20 hover:border-gray/30 bg-gray/5 hover:bg-gray/10'
                     }`}
                     onClick={() => setSelectedTransaction(transaction)}
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-3">
-                          <span className="text-base font-semibold text-white">
+                          <span className="text-base font-semibold text-gray-800">
                             To: {transaction.to.slice(0, 8)}...
                           </span>
                           <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(transaction.status)}`}>
@@ -184,9 +184,9 @@ export default function TransactionSigner({ wallet, onTransactionSigned }: Trans
                           </span>
                         </div>
                         <div className="space-y-1 text-sm">
-                          <p className="text-gray-400">Amount: <span className="text-white font-medium">{transaction.amount} XLM</span></p>
-                          {transaction.memo && <p className="text-gray-400">Memo: <span className="text-gray-300">{transaction.memo}</span></p>}
-                          <p className="text-gray-400">Signatures: <span className="text-white font-medium">{transaction.signatureShares.length}/{wallet.config.threshold}</span></p>
+                          <p className="text-gray-600">Amount: <span className="text-gray-800 font-medium">{transaction.amount} XLM</span></p>
+                          {transaction.memo && <p className="text-gray-600">Memo: <span className="text-gray-700">{transaction.memo}</span></p>}
+                          <p className="text-gray-600">Signatures: <span className="text-gray-800 font-medium">{transaction.signatureShares.length}/{wallet.config.threshold}</span></p>
                           {/* Status indicators */}
                           <div className="flex items-center space-x-4 mt-2">
                             <div className="flex items-center space-x-1">
@@ -219,38 +219,38 @@ export default function TransactionSigner({ wallet, onTransactionSigned }: Trans
 
           {/* Signing Interface */}
           {selectedTransaction && (
-            <div className="border-t border-white/10 pt-8">
-              <h3 className="text-xl font-semibold text-white mb-6">Sign Selected Transaction</h3>
+            <div className="border-t border-gray/20 pt-8">
+              <h3 className="text-xl font-semibold text-gray-800 mb-6">Sign Selected Transaction</h3>
 
-              <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-xl p-6 mb-6 border border-white/10">
-                <h4 className="text-lg font-semibold text-white mb-4">Transaction Details</h4>
+              <div className="bg-gradient-to-br from-gray/5 to-gray/10 rounded-xl p-6 mb-6 border border-gray/20">
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">Transaction Details</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-gray-400 block mb-1">To:</span>
-                    <span className="text-gray-300 font-mono break-all">{selectedTransaction.to}</span>
+                    <span className="text-gray-600 block mb-1">To:</span>
+                    <span className="text-gray-700 font-mono break-all">{selectedTransaction.to}</span>
                   </div>
                   <div>
-                    <span className="text-gray-400 block mb-1">Amount:</span>
-                    <span className="text-white font-medium">{selectedTransaction.amount} XLM</span>
+                    <span className="text-gray-600 block mb-1">Amount:</span>
+                    <span className="text-gray-800 font-medium">{selectedTransaction.amount} XLM</span>
                   </div>
                   <div>
-                    <span className="text-gray-400 block mb-1">Memo:</span>
-                    <span className="text-gray-300">{selectedTransaction.memo || 'None'}</span>
+                    <span className="text-gray-600 block mb-1">Memo:</span>
+                    <span className="text-gray-700">{selectedTransaction.memo || 'None'}</span>
                   </div>
                   <div>
-                    <span className="text-gray-400 block mb-1">Status:</span>
-                    <span className="text-white capitalize">{selectedTransaction.status}</span>
+                    <span className="text-gray-600 block mb-1">Status:</span>
+                    <span className="text-gray-800 capitalize">{selectedTransaction.status}</span>
                   </div>
                   <div className="md:col-span-2">
-                    <span className="text-gray-400 block mb-1">Signatures:</span>
-                    <span className="text-white font-medium">{selectedTransaction.signatureShares.length}/{wallet.config.threshold}</span>
+                    <span className="text-gray-600 block mb-1">Signatures:</span>
+                    <span className="text-gray-800 font-medium">{selectedTransaction.signatureShares.length}/{wallet.config.threshold}</span>
                   </div>
                 </div>
               </div>
 
               {/* Participant Selection */}
               <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-300 mb-3">
+                <label className="block text-sm font-semibold text-gray-700 mb-3">
                   Select Your Participant *
                 </label>
                 <select
@@ -259,11 +259,11 @@ export default function TransactionSigner({ wallet, onTransactionSigned }: Trans
                     const participant = wallet.participants.find(p => p.id === e.target.value);
                     setSelectedParticipant(participant || null);
                   }}
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 input-field"
+                  className="w-full px-4 py-3 bg-gray/5 border border-gray/20 rounded-lg text-gray-800 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 input-field"
                 >
-                  <option value="" className="text-gray-500 bg-gray-800">Choose your participant...</option>
+                  <option value="" className="text-gray-500 bg-white">Choose your participant...</option>
                   {wallet.participants.filter(p => p.keyShare).map((participant) => (
-                    <option key={participant.id} value={participant.id} className="text-white bg-gray-800">
+                    <option key={participant.id} value={participant.id} className="text-gray-800 bg-white">
                       {participant.id} (Share #{participant.keyShare!.index})
                     </option>
                   ))}
