@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "next dev",
     "build:wasm": "cd wasm && wasm-pack build --target web --out-dir pkg && cd .. && node copy-wasm.js",
-    "build": "if exist public\\wasm\\pkg\\ed25519_tss_wasm_bg.wasm (echo WebAssembly files already exist, skipping build) else (npm run build:wasm) && next build",
+    "build": "node check-wasm.js && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
