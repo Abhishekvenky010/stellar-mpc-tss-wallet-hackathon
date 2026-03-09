@@ -2,16 +2,19 @@
   "name": "stellar-mpc-tss-web",
   "version": "1.0.0",
   "description": "Stellar MPC-TSS Web Application - Next.js interface for WebAssembly multi-party cryptography on Stellar blockchain",
-  "author": "Centurion University of Technology & Management (CUTM), Bhubaneswar",
+  "author": "Centurion University of Technology & Management",
   "private": true,
+  "files": [
+    "public/wasm/pkg"
+  ],
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build:wasm": "cd wasm && wasm-pack build --target web --out-dir pkg && cd .. && node copy-wasm.js",
+    "build": "node check-wasm.js && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "build:wasm": "cd wasm && wasm-pack build --target web --out-dir pkg && cd .. && mkdir -p public/wasm && cd public/wasm && if [ ! -e pkg ]; then ln -s ../../wasm/pkg pkg; fi",
     "server": "node server/mpc-signaling-server.js"
   },
   "dependencies": {
