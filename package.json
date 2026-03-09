@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build:wasm": "cd wasm && wasm-pack build --target web --out-dir pkg && cd .. && if not exist public\\wasm\\pkg mkdir -p public\\wasm\\pkg && xcopy /E /I /Y wasm\\pkg public\\wasm\\pkg 2>&1 || (mkdir -p public/wasm/pkg && cp -r wasm/pkg/* public/wasm/pkg)",
+    "build:wasm": "cd wasm && wasm-pack build --target web --out-dir pkg && cd .. && node copy-wasm.js",
     "build": "npm run build:wasm && next build",
     "start": "next start",
     "lint": "eslint",
