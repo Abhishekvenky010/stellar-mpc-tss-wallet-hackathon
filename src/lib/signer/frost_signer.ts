@@ -19,8 +19,9 @@ async function initWasm(): Promise<any> {
   }
 
   try {
-    // Dynamically import the WASM module
-    const wasmModule = await import('ed25519_tss_wasm');
+    // Dynamically import the locally built WASM module with direct path
+    // @ts-ignore - Ignore TypeScript error for dynamic import
+    const wasmModule = await import('../../../wasm/pkg/ed25519_tss_wasm.js');
     
     // Initialize the WASM module using the default export (__wbg_init)
     if (wasmModule.default) {
