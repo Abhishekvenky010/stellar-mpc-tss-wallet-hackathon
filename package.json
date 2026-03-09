@@ -4,10 +4,13 @@
   "description": "Stellar MPC-TSS Web Application - Next.js interface for WebAssembly multi-party cryptography on Stellar blockchain",
   "author": "Centurion University of Technology & Management",
   "private": true,
+  "files": [
+    "public/wasm/pkg"
+  ],
   "scripts": {
     "dev": "next dev",
     "build:wasm": "cd wasm && wasm-pack build --target web --out-dir pkg && cd .. && node copy-wasm.js",
-    "build": "npm run build:wasm && next build",
+    "build": "if exist public\\wasm\\pkg\\ed25519_tss_wasm_bg.wasm (echo WebAssembly files already exist, skipping build) else (npm run build:wasm) && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "jest",

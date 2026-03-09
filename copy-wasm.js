@@ -14,6 +14,11 @@ if (!fs.existsSync(targetDir)) {
 // Copy files
 const files = fs.readdirSync(sourceDir);
 files.forEach(file => {
+  if (file === '.gitignore') {
+    console.log(`Skipped: ${file}`);
+    return;
+  }
+  
   const sourcePath = path.join(sourceDir, file);
   const targetPath = path.join(targetDir, file);
   
@@ -24,14 +29,18 @@ files.forEach(file => {
     }
     const dirFiles = fs.readdirSync(sourcePath);
     dirFiles.forEach(dirFile => {
-      fs.copyFileSync(path.join(sourcePath, dirFile), path.join(targetPath, dirFile));
+      if (dirFile !== '.gitignore') {
+        fs.copyFileSync(path.join(sourcePath, dirFile), path.join(targetPath, dirFile));
+        console.log(`Copied: ${path.join(file, dirFile)}`);
+      } else {
+        console.log(`Skipped: ${path.join(file, dirFile)}`);
+      }
     });
   } else {
     // Copy files
     fs.copyFileSync(sourcePath, targetPath);
+    console.log(`Copied: ${file}`);
   }
-  
-  console.log(`Copied: ${file}`);
 });
 
 console.log('WebAssembly files copied successfully!');
