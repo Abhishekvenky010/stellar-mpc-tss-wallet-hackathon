@@ -19,14 +19,11 @@ async function initWasm(): Promise<any> {
   }
 
   try {
-    // Dynamically import the locally built WASM module with direct path
-    // @ts-ignore - Ignore TypeScript error for dynamic import
-    const wasmModule = await import('../../../wasm/pkg/ed25519_tss_wasm.js');
+    // Dynamic import using eval to prevent static resolution
+    const wasmModule = await eval('import("/wasm/pkg/ed25519_tss_wasm.js")');
     
-    // Initialize the WASM module using the default export (__wbg_init)
-    if (wasmModule.default) {
-      await wasmModule.default();
-    }
+    // Initialize the WASM module
+    await wasmModule.default();
     wasmInstance = wasmModule;
     
     MPCLogger.dkg('Real WASM module initialized successfully');

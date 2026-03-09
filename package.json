@@ -6,12 +6,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build:wasm": "cd wasm && wasm-pack build --target web --out-dir pkg && cd .. && powershell -Command \"New-Item -ItemType Directory -Force -Path 'public/wasm'; Copy-Item -Path 'wasm/pkg/*' -Destination 'public/wasm/pkg' -Recurse -Force\"",
+    "build": "npm run build:wasm && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "build:wasm": "cd wasm && wasm-pack build --target web --out-dir pkg && cd .. && mkdir -p public/wasm && cd public/wasm && if [ ! -e pkg ]; then ln -s ../../wasm/pkg pkg; fi",
     "server": "node server/mpc-signaling-server.js"
   },
   "dependencies": {
