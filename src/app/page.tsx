@@ -6,6 +6,8 @@ import WalletCreator from '@/components/WalletCreator';
 import TransactionCreator from '@/components/TransactionCreator';
 import TransactionSigner from '@/components/TransactionSigner';
 import { StellarTSSWallet } from '@/lib/tss/wallet';
+import { PasswordProvider } from '@/lib/password-context';
+import PasswordPrompt from '@/components/PasswordPrompt';
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<'dashboard' | 'create' | 'transaction' | 'sign'>('dashboard');
@@ -13,9 +15,13 @@ export default function Home() {
   const [debugInfo, setDebugInfo] = useState<any>(null);
 
   return (
-    <div className="min-h-screen">
-      {/* Header with gradient border */}
-      <header className="relative">
+    <PasswordProvider>
+      <div className="min-h-screen">
+        {/* Password Prompt Modal */}
+        <PasswordPrompt />
+        
+        {/* Header with gradient border */}
+        <header className="relative">
         <div className="absolute top-0 left-0 right-0 h-1 bg: var(--primary-gradient)"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
@@ -117,5 +123,6 @@ export default function Home() {
         </div>
       </footer>
     </div>
+    </PasswordProvider>
   );
 }

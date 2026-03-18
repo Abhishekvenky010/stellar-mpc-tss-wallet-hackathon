@@ -11,14 +11,28 @@ import {
   withRetry
 } from './types';
 import * as nacl from 'tweetnacl';
+import { frostAggregate } from '../signer/frost_signer';
 
 // Import WASM cryptographic functions
 // Note: This will be dynamically imported to handle loading
 let wasmModule: any = null;
 
 async function loadWasmModule() {
-  // WASM loading disabled for production compatibility
-  return null;
+  if (wasmModule) return wasmModule;
+  
+  try {
+    // Dynamically import the real WASM module from src/wasm-pkg
+    // @ts-ignore - WASM module in src folder
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const wasm = await import('../../wasm-pkg/ed25519_tss_wasm.js');
+    await wasm.default();
+    wasmModule = wasm;
+    console.log('[Signing] Real WASM module loaded successfully');
+    return wasmModule;
+  } catch (error) {
+    console.warn('[Signing] WASM module not available:', error);
+    return null;
+  }
 }
 
 /**
@@ -445,6 +459,7 @@ export class TSSSigningService {
 
   /**
    * Aggregate partial signatures into a complete Stellar-compatible signature
+   * Uses real FROST WASM for threshold signature aggregation
    */
   private async aggregatePartialSignatures(
     partialSignatures: AggSignStepTwoData[],
@@ -455,37 +470,36 @@ export class TSSSigningService {
       throw new Error('No partial signatures to aggregate');
     }
 
-    // For this implementation, create a signature using the aggregate key
-    // The partial signatures are collected but the final signature uses the aggregate key
-    // In production TSS, signatures would be cryptographically combined
-
-    if (!aggregateWallet.aggregateSecretKey) {
-      throw new Error('Aggregate secret key not available');
+    // Verify threshold requirements
+    if (partialSignatures.length < aggregateWallet.threshold) {
+      throw new Error(`Insufficient signatures: ${partialSignatures.length}/${aggregateWallet.threshold} required`);
     }
 
-    const keypair = this.getKeypairFromSeed(aggregateWallet.aggregateSecretKey);
-
-    console.log('🔐 TSS Debug - Aggregate signing:');
-    console.log('Aggregate public key:', aggregateWallet.aggregatedPublicKey);
-    console.log('Keypair public key:', keypair.publicKey());
-    console.log('Keys match:', aggregateWallet.aggregatedPublicKey === keypair.publicKey());
-
-    // Sign the actual transaction hash provided
-    if (!transactionHash) {
-      throw new Error('Transaction hash is required for signature aggregation');
+    // Use real FROST WASM aggregation
+    if (!aggregateWallet.walletId || aggregateWallet.walletId === 0) {
+      throw new Error('FROST wallet ID not available for aggregation');
     }
 
-    const signature = keypair.sign(transactionHash);
+    console.log('🔐 TSS Debug - Using FROST aggregation:');
+    console.log('Wallet ID:', aggregateWallet.walletId);
+    console.log('Threshold:', aggregateWallet.threshold);
+    console.log('Partial signatures:', partialSignatures.length);
 
-    console.log('Aggregate signature created, length:', signature.length);
+    try {
+      // Call the real FROST WASM aggregation function
+      const frostSignature = await frostAggregate(aggregateWallet.walletId);
+      
+      console.log('FROST aggregation completed, signature length:', frostSignature.length);
 
-    console.log('✅ TSS signature aggregation completed for Stellar blockchain');
-
-    return {
-      signature: new Uint8Array(signature),
-      publicKey: aggregateWallet.aggregatedPublicKey,
-      transaction: new Uint8Array()
-    };
+      return {
+        signature: frostSignature,
+        publicKey: aggregateWallet.aggregatedPublicKey,
+        transaction: transactionHash ? new Uint8Array(transactionHash) : new Uint8Array()
+      };
+    } catch (error) {
+      console.error('FROST aggregation failed:', error);
+      throw new Error(`FROST signature aggregation failed: ${error}`);
+    }
   }
   /**
    * Generate signature hint for Stellar transaction

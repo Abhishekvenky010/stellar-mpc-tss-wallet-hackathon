@@ -75,7 +75,7 @@ export async function encryptData(data: string, password: string): Promise<strin
   combined.set(iv, salt.length);
   combined.set(new Uint8Array(encrypted), salt.length + iv.length);
 
-  return btoa(String.fromCharCode(...combined));
+  return Buffer.from(combined).toString('base64');
 }
 
 /**
@@ -83,7 +83,7 @@ export async function encryptData(data: string, password: string): Promise<strin
  */
 export async function decryptData(encryptedData: string, password: string): Promise<string> {
   try {
-    const combined = new Uint8Array(atob(encryptedData).split('').map(c => c.charCodeAt(0)));
+    const combined = Uint8Array.from(atob(encryptedData), c => c.charCodeAt(0));
 
     const salt = combined.slice(0, 16);
     const iv = combined.slice(16, 28);

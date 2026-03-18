@@ -4,8 +4,12 @@ import { Round1Commitment, Round2Signature, DkgPackage, MPCError, MPCLogger } fr
 let wasmModule: any = null;
 let wasmInstance: any = null;
 
+// Flag to enable mock mode for testing only (disabled in production)
+const ENABLE_MOCK_FOR_TESTING = typeof process !== 'undefined' && process.env?.NODE_ENV === 'test';
+
 /**
  * Initialize the real WASM module
+ * In production, this MUST succeed - no mock fallback allowed
  */
 async function initWasm(): Promise<any> {
   if (wasmInstance) {
@@ -14,13 +18,15 @@ async function initWasm(): Promise<any> {
 
   // Check if we're in a browser environment
   if (typeof window === 'undefined') {
-    // SSR environment - use mock mode
-    return initMockWasm();
+    // SSR environment - throw error, don't use mock
+    throw new Error('WASM module not available in SSR environment. Please use client-side rendering.');
   }
 
   try {
-    // Dynamic import using eval to prevent static resolution
-    const wasmModule = await eval('import("/wasm/pkg/ed25519_tss_wasm.js")');
+    // Dynamic import from src/wasm-pkg folder (works with Turbopack)
+    // @ts-ignore - WASM module in src folder
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const wasmModule = await import('../../wasm-pkg/ed25519_tss_wasm.js');
     
     // Initialize the WASM module
     await wasmModule.default();
@@ -29,15 +35,21 @@ async function initWasm(): Promise<any> {
     MPCLogger.dkg('Real WASM module initialized successfully');
     return wasmInstance;
   } catch (error) {
-    console.warn('[WASM] Failed to load real WASM module, falling back to mock:', error);
-    return initMockWasm();
+    // In production, we should NOT fall back to mock - this is a critical error
+    console.error('[WASM] Failed to load real WASM module:', error);
+    throw new Error('FROST WASM module failed to load. This is required for production use.');
   }
 }
 
 /**
- * Initialize mock WASM module (fallback for SSR or when real WASM is unavailable)
+ * Initialize mock WASM module (ONLY for testing - not allowed in production)
  */
 function initMockWasm(): Promise<any> {
+  // Only allow mock in test environment
+  if (!ENABLE_MOCK_FOR_TESTING) {
+    throw new Error('Mock WASM is not allowed in production. Real WASM must be loaded.');
+  }
+  
   // Generate unique keys for each participant based on participant index
   function generateUniqueParticipantKey(participantIndex: number): Uint8Array {
     const key = new Uint8Array(32);
