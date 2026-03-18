@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./src/types", "./public/wasm/pkg"]
   },
   "include": [
     "next-env.d.ts",
@@ -28,7 +29,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "public/wasm/pkg/**/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }

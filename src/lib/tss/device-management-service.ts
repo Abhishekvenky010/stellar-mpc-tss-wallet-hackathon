@@ -45,9 +45,14 @@ export async function loadWasmModule(): Promise<any> {
   if (wasmModule) return wasmModule;
   
   try {
-    // Always use mock mode to avoid import errors during SSR
-    // In production, this would dynamically load the real WASM module
-    return createMockWasmModule();
+    // Dynamically import the real WASM module from src/wasm-pkg
+    // @ts-ignore - WASM module in src folder
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const wasm = await import('../../wasm-pkg/ed25519_tss_wasm.js');
+    await wasm.default();
+    wasmModule = wasm;
+    console.log('[DeviceManager] Real WASM module loaded successfully');
+    return wasmModule;
   } catch (error) {
     console.warn('[DeviceManager] WASM module not available, using mock mode:', error);
     return createMockWasmModule();

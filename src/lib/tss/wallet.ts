@@ -28,8 +28,8 @@ export class StellarTSSWallet {
       throw MPCError.wrongThreshold(threshold, participantIds.length);
     }
 
-    // Generate distributed key shares
-    const { publicKey, keyShares, walletId } = await this.generateDistributedKey(participantIds.length);
+    // Generate distributed key shares using the provided threshold
+    const { publicKey, keyShares, walletId } = await this.generateDistributedKey(participantIds.length, threshold);
 
     const participants: TSSParticipant[] = participantIds.map((id, index) => ({
       id,
@@ -72,7 +72,7 @@ export class StellarTSSWallet {
   /**
    * Generate distributed key shares using FROST DKG
    */
-  private async generateDistributedKey(numShares: number): Promise<{
+  private async generateDistributedKey(numShares: number, threshold: number): Promise<{
     publicKey: string;
     keyShares: TSSKeyShare[];
     walletId: number;
@@ -81,9 +81,8 @@ export class StellarTSSWallet {
 
     // Create participant IDs (1, 2, 3, ...) - WASM expects 1-based indexing
     const participantIds = Array.from({ length: numShares }, (_, i) => i + 1);
-    const threshold = Math.ceil(numShares / 2); // Simple majority threshold
 
-    // Initialize FROST DKG
+    // Initialize FROST DKG with the provided threshold
     const dkgPackage = await frostDkgInit(participantIds, threshold);
 
     // Extract public key from the DKG package
@@ -238,6 +237,7 @@ export class StellarTSSWallet {
     const aggregateSecretKey = await this.reconstructAggregateKey();
 
     const aggregateWallet = {
+      walletId: this.wallet!.participants[0]?.walletId || 0, // Use walletId from participant
       aggregatedPublicKey: this.wallet!.config.publicKey,
       participantKeys: this.wallet!.participants.map(p => p.publicKey),
       threshold: this.wallet!.config.threshold,

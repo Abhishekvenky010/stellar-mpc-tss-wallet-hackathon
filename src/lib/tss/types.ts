@@ -24,6 +24,7 @@ export interface PartialSignature {
  * TSS wallet aggregate data
  */
 export interface AggregateWallet {
+  walletId: number; // FROST wallet ID for aggregation
   aggregatedPublicKey: string;
   participantKeys: string[];
   threshold: number;
